@@ -1,0 +1,12 @@
+<div id="{{ _self.slug }}" class="section" data-color="{{ page.header.color }}" data-title="{{ page.header.title }}">
+	<div class="carousel">
+		<div class="carousel-track">
+			{% for image in page.media.images %}
+				<img src="{{ image.url }}" alt="{{ image.filename }}">
+			{% endfor %}
+		</div>
+	</div>
+	<div class="content">
+		{{ content }}
+	</div>
+</div>

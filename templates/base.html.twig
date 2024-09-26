@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="{{ grav.language.getActive ?: 'en' }}">
+	<head>
+		{% block head %}
+			<meta charset="utf-8"/>
+			<title>
+				{% if header.title %}
+					{{ header.title }}
+				{% endif %}
+				{{ site.title }}
+			</title>
+			{% block stylesheets %}
+				{% do assets.addCss('theme://css/styles.css') %}
+			{% endblock %}
+			{% block javascripts %}
+				{% do assets.addJs('theme://js/script.js') %}
+			{% endblock %}
+
+			{% block assets deferred %}
+				{{ assets.css()|raw }}
+				{{ assets.js()|raw }}
+			{% endblock %}
+			
+		{% endblock head %}
+	</head>
+	<body>
+		{% block header %}
+			<header id="main-header">
+				<h1>{{ site.title }}</h1>
+			</header>
+		{% endblock %}
+		{% block subheader %}
+			<div id="sub-header">
+				<h2 id="sub-header-title">{{ page.header.title }}</h2>
+			</div>
+		{% endblock %}
+		{% block sidebar %}
+			<nav id="sidebar">
+				<ul>
+					{% for module in page.collection() %}
+						<li data-section="{{ loop.index }}">
+							<a href="#{{ module.slug }}">{{ loop.index }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</nav>
+		{% endblock %}
+		{% block content %}
+			<div id="main-content"></div>
+		{% endblock %}
+		{% block footer %}{% endblock %}
+	</body>
+</html>

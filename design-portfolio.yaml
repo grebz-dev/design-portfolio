@@ -1,0 +1,5 @@
+name: Design-Portfolio
+version: 0.0.1
+enabled: true
+dropdown:
+  enabled: true

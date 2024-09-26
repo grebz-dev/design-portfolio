@@ -1,0 +1,32 @@
+name: Design Portfolio
+slug: design-portfolio
+type: theme
+version: 0.1.0
+description: A single-page continuously scrolling portfolio theme with project image carousels.
+icon: rebel
+author:
+  name: grebz-dev
+  email: jgreb314@gmail.com
+homepage: https://github.com/grebz-dev/grav-theme-design-portfolio
+demo: http://demo.yoursite.com
+keywords: grav, theme, etc
+bugs: https://github.com/grebz-dev/grav-theme-design-portfolio/issues
+readme: https://github.com/grebz-dev/grav-theme-design-portfolio/blob/develop/README.md
+license: MIT
+
+dependencies:
+  - { name: grav, version: '>=1.6.0' }
+
+form:
+  validation: loose
+  fields:
+    dropdown.enabled:
+        type: toggle
+        label: Dropdown in Menu
+        highlight: 1
+        default: 1
+        options:
+          1: PLUGIN_ADMIN.ENABLED
+          0: PLUGIN_ADMIN.DISABLED
+        validate:
+          type: bool
