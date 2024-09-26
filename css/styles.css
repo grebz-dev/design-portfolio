@@ -78,6 +78,7 @@ body {
 }
 
 #main-content {
+  position: absolute;
   margin-top: 100px;
   margin-left: 60px;
 }
