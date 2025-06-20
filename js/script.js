@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
         link.addEventListener('click', function (event) {
             event.preventDefault();
             const targetSection = sections[index];
-            const targetPosition = targetSection.offsetTop;
 
             // Update active state immediately
             sidebarLinks.forEach(l => l.classList.remove('active'));
@@ -46,10 +45,52 @@ document.addEventListener('DOMContentLoaded', function () {
             // Resize tabs
             resizeSidebarTabs();
 
-            window.scrollTo({
-                top: targetPosition,
-                behavior: 'smooth'
+            // Reset current carousel to beginning before transitioning
+            const currentActiveSection = document.querySelector('.section');
+            let currentSectionIndex = 0;
+            sections.forEach((section, idx) => {
+                const rect = section.getBoundingClientRect();
+                const viewportCenter = window.innerHeight / 2;
+                if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
+                    currentSectionIndex = idx;
+                }
             });
+            
+            const currentSection = sections[currentSectionIndex];
+            if (currentSection && currentSection !== targetSection) {
+                const currentCarousel = currentSection.querySelector('.carousel-track');
+                if (currentCarousel && currentSection._carouselData) {
+                    // Reset current carousel to beginning
+                    currentSection._carouselData.currentImageIndex = 0;
+                    smoothScrollCarousel(currentCarousel, 0, 200, () => {
+                        // After resetting current carousel, scroll to target section
+                        proceedToTargetSection();
+                    });
+                    return; // Exit early, proceedToTargetSection will handle the rest
+                }
+            }
+            
+            // If no current carousel to reset, proceed immediately
+            proceedToTargetSection();
+            
+            function proceedToTargetSection() {
+            // Use the smooth scrolling function
+                isScrollingBetweenSections = true;
+                updateSectionState(targetSection);
+                
+                smoothScrollToSection(targetSection, () => {
+                    isScrollingBetweenSections = false;
+                    // Reset target carousel to first image when manually navigating
+                    const carousel = targetSection.querySelector('.carousel-track');
+                    if (carousel) {
+                        // Update the section's carousel data to reflect reset
+                        if (targetSection._carouselData) {
+                            targetSection._carouselData.currentImageIndex = 0;
+                        }
+                        smoothScrollCarousel(carousel, 0, 300);
+                    }
+                });
+            }
         });
     });
 
@@ -73,33 +114,66 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Update Sub-header and Sidebar on Scroll
+    let scrollUpdateTimeout;
+    
     window.addEventListener('scroll', function () {
-        sections.forEach((section, index) => {
-            const rect = section.getBoundingClientRect();
-            if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-                const color = section.getAttribute('data-color');
-                const title = section.getAttribute('data-title');
+        // Throttle scroll updates for better performance
+        if (scrollUpdateTimeout) return;
+        
+        scrollUpdateTimeout = setTimeout(() => {
+            // Only update if we're not in the middle of a section transition
+            if (!isScrollingBetweenSections) {
+                sections.forEach((section, index) => {
+                    const rect = section.getBoundingClientRect();
+                    const viewportCenter = window.innerHeight / 2;
+                    
+                    // Use a more precise detection area for better responsiveness
+                    if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
+                        const color = section.getAttribute('data-color');
+                        const title = section.getAttribute('data-title');
 
-                // Update sub-header
-                const subHeader = document.getElementById('sub-header');
-                const subHeaderTitle = document.getElementById('sub-header-title');
-                subHeader.style.backgroundColor = color;
-                subHeaderTitle.textContent = title;
+                        // Update sub-header
+                        const subHeader = document.getElementById('sub-header');
+                        const subHeaderTitle = document.getElementById('sub-header-title');
+                        
+                        if (subHeader && color && subHeader.style.backgroundColor !== color) {
+                            subHeader.style.transition = 'background-color 0.3s ease';
+                            subHeader.style.backgroundColor = color;
+                        }
+                        
+                        if (subHeaderTitle && title && subHeaderTitle.textContent !== title) {
+                            subHeaderTitle.style.transition = 'opacity 0.2s ease';
+                            subHeaderTitle.style.opacity = '0';
+                            
+                            setTimeout(() => {
+                                subHeaderTitle.textContent = title;
+                                subHeaderTitle.style.opacity = '1';
+                            }, 200);
+                        }
 
-                // Update sidebar active link
-                sidebarLinks.forEach(link => {
-                    link.classList.remove('active');
+                        // Update sidebar active link
+                        const currentActive = document.querySelector('#sidebar li.active');
+                        const newActive = sidebarLinks[index];
+                        
+                        if (currentActive !== newActive) {
+                            sidebarLinks.forEach(link => {
+                                link.classList.remove('active');
+                            });
+                            newActive.classList.add('active');
+                            
+                            // Resize tabs
+                            resizeSidebarTabs();
+                        }
+                    }
                 });
-                sidebarLinks[index].classList.add('active');
-                
-                // Resize tabs after active state change
-                resizeSidebarTabs();
             }
-        });
+            scrollUpdateTimeout = null;
+        }, 16); // ~60fps throttling
     });
 
-    // Carousel Scroll Handling with Image-by-Image Scrolling
     // Carousel Scroll Handling
+    let isScrollingBetweenSections = false;
+    
     sections.forEach((section) => {
         const carouselTrack = section.querySelector('.carousel-track');
         if (!carouselTrack) return;
@@ -110,70 +184,215 @@ document.addEventListener('DOMContentLoaded', function () {
         let currentImageIndex = 0;
         const totalImages = images.length;
         let scrollingHorizontally = false;
-        let scrollTimeout;
+        let scrollCooldown = false;
 
         section.addEventListener('wheel', function (e) {
-            const deltaY = e.deltaY;
-
-            if (scrollingHorizontally) {
+            // Prevent scrolling if we're transitioning between sections or carousel is animating
+            if (isScrollingBetweenSections || scrollCooldown || scrollingHorizontally) {
                 e.preventDefault();
                 return;
             }
 
-            if (deltaY > 0) {
+            // Prevent any default scrolling
+            e.preventDefault();
+
+            const deltaY = e.deltaY;
+            const scrollDirection = deltaY > 0 ? 'down' : 'up';
+
+            // Set cooldown to prevent rapid fire - make it longer than carousel animation
+            scrollCooldown = true;
+            setTimeout(() => {
+                scrollCooldown = false;
+            }, 350); // Longer than the 300ms carousel animation
+
+            if (scrollDirection === 'down') {
+                // Scrolling down
                 if (currentImageIndex < totalImages - 1) {
-                    e.preventDefault();
                     currentImageIndex++;
+                    section._carouselData.currentImageIndex = currentImageIndex;
                     scrollToImage(currentImageIndex);
                 } else {
-                    // Move to next section
-                    const nextSection = section.nextElementSibling;
-                    if (nextSection) {
-                        e.preventDefault();
-                        window.scrollTo({
-                            top: nextSection.offsetTop,
-                            behavior: 'smooth'
-                        });
-                    }
+                    // Only move to next section if we're at the last image
+                    transitionToNextSection(section);
                 }
-            } else if (deltaY < 0) {
+            } else {
+                // Scrolling up
                 if (currentImageIndex > 0) {
-                    e.preventDefault();
                     currentImageIndex--;
+                    section._carouselData.currentImageIndex = currentImageIndex;
                     scrollToImage(currentImageIndex);
                 } else {
-                    // Move to previous section
-                    const prevSection = section.previousElementSibling;
-                    if (prevSection) {
-                        e.preventDefault();
-                        window.scrollTo({
-                            top: prevSection.offsetTop,
-                            behavior: 'smooth'
-                        });
-                    }
+                    // Only move to previous section if we're at the first image
+                    transitionToPreviousSection(section);
                 }
             }
         }, { passive: false });
 
         function scrollToImage(index) {
+            if (scrollingHorizontally) return;
+            
+            scrollingHorizontally = true;
             const carouselWidth = carouselTrack.clientWidth;
             const scrollPosition = index * carouselWidth;
 
-            scrollingHorizontally = true;
-
-            carouselTrack.scrollTo({
-                left: scrollPosition,
-                behavior: 'smooth',
-            });
-            // Reset scrollingHorizontally after scrolling ends
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(function () {
+            // Use simple smooth scrolling
+            smoothScrollCarousel(carouselTrack, scrollPosition, 300, () => {
                 scrollingHorizontally = false;
-            }, 100); // Adjust duration as needed
+            });
         }
+
+        function transitionToNextSection(currentSection) {
+            const nextSection = currentSection.nextElementSibling;
+            if (nextSection) {
+                isScrollingBetweenSections = true;
+                
+                // Update UI state before scrolling
+                updateSectionState(nextSection);
+                
+                // Smooth scroll to next section
+                smoothScrollToSection(nextSection, () => {
+                    isScrollingBetweenSections = false;
+                    // Always start at first image in new section
+                    const nextCarousel = nextSection.querySelector('.carousel-track');
+                    if (nextCarousel && nextSection._carouselData) {
+                        nextSection._carouselData.currentImageIndex = 0;
+                        // Update the local variable for this section
+                        const nextSectionLoop = sections[Array.from(sections).indexOf(nextSection)];
+                        smoothScrollCarousel(nextCarousel, 0, 300);
+                    }
+                });
+            }
+        }
+
+        function transitionToPreviousSection(currentSection) {
+            const prevSection = currentSection.previousElementSibling;
+            if (prevSection) {
+                isScrollingBetweenSections = true;
+                
+                // Update UI state before scrolling
+                updateSectionState(prevSection);
+                
+                // Smooth scroll to previous section
+                smoothScrollToSection(prevSection, () => {
+                    isScrollingBetweenSections = false;
+                    // Always start at last image in previous section
+                    const prevCarousel = prevSection.querySelector('.carousel-track');
+                    if (prevCarousel && prevSection._carouselData) {
+                        const prevImages = prevCarousel.querySelectorAll('img');
+                        if (prevImages.length > 0) {
+                            prevSection._carouselData.currentImageIndex = prevImages.length - 1;
+                            const lastImagePosition = (prevImages.length - 1) * prevCarousel.clientWidth;
+                            smoothScrollCarousel(prevCarousel, lastImagePosition, 300);
+                        }
+                    }
+                });
+            }
+        }
+
+        // Store section data for state management
+        section._carouselData = {
+            currentImageIndex: 0, // Always start at 0
+            totalImages: totalImages,
+            scrollingHorizontally: false
+        };
+        
+        // Initialize currentImageIndex from stored data
+        currentImageIndex = section._carouselData.currentImageIndex;
     });
 
-    // Function to initialize the active state based on current hash or default to first
+    // Smooth carousel scrolling
+    function smoothScrollCarousel(element, targetLeft, duration = 300, callback) {
+        const startLeft = element.scrollLeft;
+        const distance = targetLeft - startLeft;
+        
+        // Don't animate if we're already at the target
+        if (Math.abs(distance) < 1) {
+            if (callback) callback();
+            return;
+        }
+
+        let startTime = null;
+
+        function animate(currentTime) {
+            if (startTime === null) startTime = currentTime;
+            
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Smooth ease-out
+            const easedProgress = 1 - Math.pow(1 - progress, 3);
+            
+            const currentLeft = startLeft + (distance * easedProgress);
+            element.scrollLeft = currentLeft;
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                // Ensure we end exactly at the target
+                element.scrollLeft = targetLeft;
+                if (callback) {
+                    setTimeout(callback, 50);
+                }
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    // Section transition with smooth animation
+    function smoothScrollToSection(section, callback) {
+        const targetPosition = section.offsetTop;
+        const startPosition = window.pageYOffset;
+        const distance = targetPosition - startPosition;
+        const duration = 800; // Longer duration for section transitions
+        const startTime = performance.now();
+
+        function animate(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Cubic easing in-out for section transitions
+            const easedProgress = progress < 0.5 
+                ? 4 * progress * progress * progress 
+                : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+            
+            window.scrollTo(0, startPosition + (distance * easedProgress));
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else if (callback) {
+                setTimeout(callback, 100); // Small delay to ensure scroll is complete
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    // Update section state (sidebar, sub-header)
+    function updateSectionState(section) {
+        const sectionIndex = Array.from(sections).indexOf(section);
+        if (sectionIndex === -1) return;
+
+        const color = section.getAttribute('data-color');
+        const title = section.getAttribute('data-title');
+
+        // Update sub-header
+        const subHeader = document.getElementById('sub-header');
+        const subHeaderTitle = document.getElementById('sub-header-title');
+        if (subHeader && color) subHeader.style.backgroundColor = color;
+        if (subHeaderTitle && title) subHeaderTitle.textContent = title;
+
+        // Update sidebar active link
+        sidebarLinks.forEach(link => link.classList.remove('active'));
+        if (sidebarLinks[sectionIndex]) {
+            sidebarLinks[sectionIndex].classList.add('active');
+        }
+        
+        // Resize tabs
+        resizeSidebarTabs();
+    }
+
+    // Function to initialize the active state
     function initializeActiveState() {
         let activeIndex = 0; // Default to first project
         
@@ -201,8 +420,17 @@ document.addEventListener('DOMContentLoaded', function () {
             
             const subHeader = document.getElementById('sub-header');
             const subHeaderTitle = document.getElementById('sub-header-title');
-            if (subHeader && color) subHeader.style.backgroundColor = color;
-            if (subHeaderTitle && title) subHeaderTitle.textContent = title;
+            
+            if (subHeader && color) {
+                subHeader.style.transition = 'background-color 0.5s ease';
+                subHeader.style.backgroundColor = color;
+            }
+            
+            if (subHeaderTitle && title) {
+                subHeaderTitle.style.transition = 'opacity 0.3s ease';
+                subHeaderTitle.textContent = title;
+                subHeaderTitle.style.opacity = '1';
+            }
         }
         
         // Resize tabs
@@ -211,8 +439,16 @@ document.addEventListener('DOMContentLoaded', function () {
         // If no hash, scroll to first project smoothly
         if (!window.location.hash && sections[0]) {
             setTimeout(() => {
-                sections[0].scrollIntoView({ behavior: 'smooth' });
-            }, 100);
+                isScrollingBetweenSections = true;
+                smoothScrollToSection(sections[0], () => {
+                    isScrollingBetweenSections = false;
+                    // Initialize first carousel
+                    const firstCarousel = sections[0].querySelector('.carousel-track');
+                    if (firstCarousel) {
+                        smoothScrollCarousel(firstCarousel, 0, 300);
+                    }
+                });
+            }, 200);
         }
     }
 
