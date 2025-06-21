@@ -1,0 +1,15 @@
+title: Project
+'@extends': default
+
+form:
+  fields:
+    header.color:
+      type: colorpicker
+      label: Primary Color
+      description: Main color for this project section
+      default: '#FF5733'
+    header.bgcolor:
+      type: colorpicker
+      label: Secondary Color
+      description: Secondary accent color for this project. Used for backgrounds and highlights.
+      default: '#33A1FF'

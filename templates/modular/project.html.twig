@@ -1,5 +1,5 @@
 <div id="{{ page.slug }}" class="section" data-color="{{ page.header.color }}" data-title="{{ page.header.title }}">
-	<div class="project-container">
+	<div class="project-container" style="background-color:{{ page.header.bgcolor }}">
 		{# Create a modal for each image #}
 		{% for image in page.media.images %}
 			<input type="checkbox" id="modal-{{ page.slug }}-{{ loop.index }}">
