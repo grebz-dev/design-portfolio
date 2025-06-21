@@ -13,41 +13,13 @@
 				{% do assets.addCss('theme://css/styles.css') %}
 			{% endblock %}
 			{% block javascripts %}
-				{% do assets.addJs('theme://js/script.js') %}
+				{% do assets.addJs('theme://js/main.js', {'type': 'module'}) %}
 			{% endblock %}
 
 			{% block assets deferred %}
 				{{ assets.css()|raw }}
 				{{ assets.js()|raw }}
 			{% endblock %}
-			
-			<!-- Auto-scroll to first project if no hash is present -->
-			<script>
-				document.addEventListener('DOMContentLoaded', function() {
-					// Only auto-scroll if there's no hash in the URL
-					if (!window.location.hash) {
-						setTimeout(function() {
-							const firstSection = document.querySelector('.section');
-							if (firstSection) {
-								// Scroll to the first section
-								firstSection.scrollIntoView({ behavior: 'smooth' });
-								
-								// Trigger the sidebar and header updates manually
-								const color = firstSection.getAttribute('data-color');
-								const title = firstSection.getAttribute('data-title');
-								
-								// Update sub-header
-								const subHeader = document.getElementById('sub-header');
-								const subHeaderTitle = document.getElementById('sub-header-title');
-								if (subHeader && color) subHeader.style.backgroundColor = color;
-								if (subHeaderTitle && title) subHeaderTitle.textContent = title;
-								
-								// Update sidebar active state
-								const sidebarLinks = document.querySelectorAll('#sidebar li');
-								if (sidebarLinks.length > 0) {
-									sidebarLinks.forEach(link => link.classList.remove('active'));
-									sidebarLinks[0].classList.add('active');
-								}
 							}
 						}, 100); // Small delay to ensure everything is loaded
 					}
