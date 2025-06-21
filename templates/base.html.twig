@@ -20,12 +20,6 @@
 				{{ assets.css()|raw }}
 				{{ assets.js()|raw }}
 			{% endblock %}
-							}
-						}, 100); // Small delay to ensure everything is loaded
-					}
-				});
-			</script>
-			
 		{% endblock head %}
 	</head>
 	<body>
@@ -53,6 +47,15 @@
 		{% block content %}
 			<div id="main-content"></div>
 		{% endblock %}
-		{% block footer %}{% endblock %}
+		{% block footer %}
+			<footer id="main-footer">
+				<div class="wrapper padding">
+					<p>&copy;
+						{{ "now"|date("Y") }}
+						{{ site.title }}. All rights reserved.
+					</p>
+				</div>
+			</footer>
+		{% endblock %}
 	</body>
 </html>

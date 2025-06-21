@@ -15,28 +15,7 @@ export class SidebarModule {
         window.addEventListener('resize', () => this.resizeSidebarTabs());
     }
 
-    resizeSidebarTabs() {
-        const sidebar = document.getElementById('sidebar');
-        const sidebarHeight = sidebar.clientHeight;
-        const totalTabs = this.sidebarLinks.length;
-        const squareTabSize = 60; // Same as sidebar width for square tabs
-        const totalSquareSpace = (totalTabs - 1) * squareTabSize; // Space for inactive tabs
-        const expandedTabHeight = sidebarHeight - totalSquareSpace; // Remaining space for active tab
-
-        this.sidebarLinks.forEach((link, index) => {
-            if (link.classList.contains('active')) {
-                link.style.height = `${expandedTabHeight}px`;
-                link.style.display = 'flex';
-                link.style.alignItems = 'center';
-                link.style.justifyContent = 'center';
-            } else {
-                link.style.height = `${squareTabSize}px`;
-                link.style.display = 'flex';
-                link.style.alignItems = 'center';
-                link.style.justifyContent = 'center';
-            }
-        });
-    }
+    resizeSidebarTabs() {}
 
     getContrastYIQ(hexcolor) {
         hexcolor = hexcolor.replace('#', '');
