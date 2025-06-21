@@ -179,6 +179,127 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Carousel Scroll Handling
     let isScrollingBetweenSections = false;
+    let globalScrollCooldown = false;
+    
+    // Global wheel event listener for entire page
+    window.addEventListener('wheel', function(e) {
+        // Check if any modal is open
+        const anyModalOpen = document.querySelector('input[type="checkbox"]:checked');
+        if (anyModalOpen) {
+            e.preventDefault();
+            return;
+        }
+
+        // Prevent scrolling if we're transitioning between sections or on cooldown
+        if (isScrollingBetweenSections || globalScrollCooldown) {
+            e.preventDefault();
+            return;
+        }
+
+        // Find current active section
+        let currentSection = null;
+        let currentSectionIndex = -1;
+        
+        sections.forEach((section, index) => {
+            const rect = section.getBoundingClientRect();
+            const viewportCenter = window.innerHeight / 2;
+            if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
+                currentSection = section;
+                currentSectionIndex = index;
+            }
+        });
+
+        // If no section is currently active, find the closest one
+        if (!currentSection) {
+            let closestDistance = Infinity;
+            sections.forEach((section, index) => {
+                const rect = section.getBoundingClientRect();
+                const sectionCenter = rect.top + rect.height / 2;
+                const viewportCenter = window.innerHeight / 2;
+                const distance = Math.abs(sectionCenter - viewportCenter);
+                
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    currentSection = section;
+                    currentSectionIndex = index;
+                }
+            });
+        }
+
+        if (!currentSection || !currentSection._carouselData) return;
+
+        // Prevent default scrolling
+        e.preventDefault();
+
+        const deltaY = e.deltaY;
+        const scrollDirection = deltaY > 0 ? 'down' : 'up';
+
+        // Set global cooldown
+        globalScrollCooldown = true;
+        setTimeout(() => {
+            globalScrollCooldown = false;
+        }, 350);
+
+        const carouselData = currentSection._carouselData;
+        const carouselTrack = currentSection.querySelector('.carousel-track');
+
+        if (scrollDirection === 'down') {
+            // Scrolling down
+            if (carouselData.currentImageIndex < carouselData.totalImages - 1) {
+                carouselData.currentImageIndex++;
+                scrollToImageInSection(currentSection, carouselData.currentImageIndex);
+            } else {
+                // Move to next section
+                const nextSection = sections[currentSectionIndex + 1];
+                if (nextSection) {
+                    transitionToSection(nextSection, 0); // Start at first image
+                }
+            }
+        } else {
+            // Scrolling up
+            if (carouselData.currentImageIndex > 0) {
+                carouselData.currentImageIndex--;
+                scrollToImageInSection(currentSection, carouselData.currentImageIndex);
+            } else {
+                // Move to previous section
+                const prevSection = sections[currentSectionIndex - 1];
+                if (prevSection && prevSection._carouselData) {
+                    const lastImageIndex = prevSection._carouselData.totalImages - 1;
+                    transitionToSection(prevSection, lastImageIndex); // Start at last image
+                }
+            }
+        }
+    }, { passive: false });
+    
+    function scrollToImageInSection(section, imageIndex) {
+        const carouselTrack = section.querySelector('.carousel-track');
+        if (!carouselTrack) return;
+        
+        section._carouselData.scrollingHorizontally = true;
+        const carouselWidth = carouselTrack.clientWidth;
+        const scrollPosition = imageIndex * carouselWidth;
+
+        smoothScrollCarousel(carouselTrack, scrollPosition, 300, () => {
+            section._carouselData.scrollingHorizontally = false;
+        });
+    }
+    
+    function transitionToSection(targetSection, imageIndex = 0) {
+        isScrollingBetweenSections = true;
+        
+        // Update UI state before scrolling
+        updateSectionState(targetSection);
+        
+        // Smooth scroll to target section
+        smoothScrollToSection(targetSection, () => {
+            isScrollingBetweenSections = false;
+            // Set to specified image index
+            if (targetSection._carouselData) {
+                targetSection._carouselData.currentImageIndex = imageIndex;
+                scrollToImageInSection(targetSection, imageIndex);
+            }
+        });
+    }
     
     sections.forEach((section) => {
         const carouselTrack = section.querySelector('.carousel-track');
@@ -193,52 +314,10 @@ document.addEventListener('DOMContentLoaded', function () {
         let scrollCooldown = false;
 
         section.addEventListener('wheel', function (e) {
-            // Check if any modal is open
-            const anyModalOpen = document.querySelector('input[type="checkbox"]:checked');
-            if (anyModalOpen) {
-                e.preventDefault();
-                return;
-            }
-
-            // Prevent scrolling if we're transitioning between sections or carousel is animating
-            if (isScrollingBetweenSections || scrollCooldown || scrollingHorizontally) {
-                e.preventDefault();
-                return;
-            }
-
-            // Prevent any default scrolling
+            // All wheel handling now moved to global listener above
+            // This prevents double handling
             e.preventDefault();
-
-            const deltaY = e.deltaY;
-            const scrollDirection = deltaY > 0 ? 'down' : 'up';
-
-            // Set cooldown to prevent rapid fire - make it longer than carousel animation
-            scrollCooldown = true;
-            setTimeout(() => {
-                scrollCooldown = false;
-            }, 350); // Longer than the 300ms carousel animation
-
-            if (scrollDirection === 'down') {
-                // Scrolling down
-                if (currentImageIndex < totalImages - 1) {
-                    currentImageIndex++;
-                    section._carouselData.currentImageIndex = currentImageIndex;
-                    scrollToImage(currentImageIndex);
-                } else {
-                    // Only move to next section if we're at the last image
-                    transitionToNextSection(section);
-                }
-            } else {
-                // Scrolling up
-                if (currentImageIndex > 0) {
-                    currentImageIndex--;
-                    section._carouselData.currentImageIndex = currentImageIndex;
-                    scrollToImage(currentImageIndex);
-                } else {
-                    // Only move to previous section if we're at the first image
-                    transitionToPreviousSection(section);
-                }
-            }
+            return;
         }, { passive: false });
 
         function scrollToImage(index) {
