@@ -306,14 +306,9 @@ input[type="checkbox"]:checked + .modal-background + .modal {
 	display: flex;
 }
 
-/* Prevent body scrolling when modal is open */
-input[type="checkbox"]:checked ~ * {
-	pointer-events: none;
-}
-
-input[type="checkbox"]:checked + .modal-background,
-input[type="checkbox"]:checked + .modal-background + .modal {
-	pointer-events: auto;
+/* Block body scrolling when any modal is open */
+body:has(input[type="checkbox"]:checked) {
+	overflow: hidden;
 }
 
 .modal-background {
@@ -324,27 +319,25 @@ input[type="checkbox"]:checked + .modal-background + .modal {
 	top: 0;
 	left: 0;
 	display: none;
-	z-index: 9998;
+	z-index: 9999; /* Lower than modal container */
 	cursor: pointer;
-  overflow: hidden;
+	overflow: hidden;
+	pointer-events: auto; /* Ensure background is always clickable */
 }
 
 .modal {
 	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	display: none;
-	align-items: center;
-	justify-content: center;
-	z-index: 9999;
-	padding: 20px;
+	z-index: 10001; /* Higher than background */
 	box-sizing: border-box;
-  pointer-events: none;
-  overflow:hidden;
+  pointer-events: auto; /* Modal content is clickable */
+  overflow: hidden;
 }
 
+/* More aggressive scroll prevention */
 .modal-content {
 	background-color: #fff;
 	border-radius: 8px;
@@ -356,7 +349,6 @@ input[type="checkbox"]:checked + .modal-background + .modal {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-  pointer-events: auto;
 }
 
 .modal-header {

@@ -117,6 +117,12 @@ document.addEventListener('DOMContentLoaded', function () {
     let scrollUpdateTimeout;
     
     window.addEventListener('scroll', function () {
+        // Check if any modal is open - if so, don't update UI
+        const anyModalOpen = document.querySelector('input[type="checkbox"]:checked');
+        if (anyModalOpen) {
+            return;
+        }
+        
         // Throttle scroll updates for better performance
         if (scrollUpdateTimeout) return;
         
@@ -187,6 +193,13 @@ document.addEventListener('DOMContentLoaded', function () {
         let scrollCooldown = false;
 
         section.addEventListener('wheel', function (e) {
+            // Check if any modal is open
+            const anyModalOpen = document.querySelector('input[type="checkbox"]:checked');
+            if (anyModalOpen) {
+                e.preventDefault();
+                return;
+            }
+
             // Prevent scrolling if we're transitioning between sections or carousel is animating
             if (isScrollingBetweenSections || scrollCooldown || scrollingHorizontally) {
                 e.preventDefault();
