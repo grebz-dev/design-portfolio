@@ -115,7 +115,7 @@ body {
 }
 
 .section {
-  min-height: calc(100vh - 140px); /* 100vh - (header + footer height) */
+  height: calc(100vh - 140px); /* 100vh - (header + footer height) */
   overflow: visible;
   display: flex;
   align-items: stretch;
