@@ -170,8 +170,6 @@ body {
 }
 
 .project-images {
-  flex-shrink: 0;
-  height: 50%;
   max-width: 100%;
   min-height: 300px;
   order: 2;
@@ -182,7 +180,7 @@ body {
   min-height: 0;
   max-width: 100%;
   padding-left: 0;
-  overflow-y: auto;
+  overflow-y: hidden;
   order: 1;
 }
 
