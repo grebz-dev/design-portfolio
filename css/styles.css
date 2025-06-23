@@ -177,7 +177,6 @@ body {
 .project-images {
   flex: 0 0 45%;
   max-width: 45%;
-  height: 70vh;
   min-height: 400px;
 }
 
