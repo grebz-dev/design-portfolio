@@ -1,54 +1,95 @@
-// Main Application Entry Point
-import { SidebarModule } from './sidebar.js';
-import { ScrollModule } from './scroll.js';
-import { CarouselModule } from './carousel.js';
-import { UIModule } from './ui.js';
-
+// Simplified Main Application
 document.addEventListener('DOMContentLoaded', function () {
     const sections = document.querySelectorAll('.section');
+    const sidebar = document.getElementById('sidebar');
+    const subHeaderTitle = document.getElementById('sub-header-title');
+    const subHeader = document.getElementById('sub-header');
     
-    // Initialize all modules
-    const sidebar = new SidebarModule(sections);
-    const scroll = new ScrollModule(sections);
-    const carousel = new CarouselModule(sections);
-    const ui = new UIModule(sections);
+    // Simple sidebar functionality
+    if (sidebar) {
+        const sidebarLinks = sidebar.querySelectorAll('li');
+        
+        // Set individual colors for each sidebar item based on their section
+        sidebarLinks.forEach((link, index) => {
+            if (sections[index]) {
+                const sectionColor = sections[index].dataset.color;
+                if (sectionColor) {
+                    link.style.backgroundColor = sectionColor;
+                }
+            }
+        });
+        
+        // Handle sidebar clicks
+        sidebarLinks.forEach((link, index) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetSection = sections[index];
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        
+        // Update active sidebar item based on scroll position
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const sectionIndex = Array.from(sections).indexOf(entry.target);
+                    
+                    // Update sidebar
+                    sidebarLinks.forEach(link => link.classList.remove('active'));
+                    if (sidebarLinks[sectionIndex]) {
+                        sidebarLinks[sectionIndex].classList.add('active');
+                    }
+                    
+                    // Update sub-header color only
+                    const sectionData = entry.target.dataset;
+                    if (sectionData.title && subHeaderTitle) {
+                        subHeaderTitle.textContent = sectionData.title;
+                    }
+                    if (sectionData.color && subHeader) {
+                        subHeader.style.backgroundColor = sectionData.color;
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        sections.forEach(section => observer.observe(section));
+        
+        // Initialize first section as active and set individual sidebar colors
+        if (sections.length > 0 && sidebarLinks.length > 0) {
+            sidebarLinks[0].classList.add('active');
+            const firstSectionData = sections[0].dataset;
+            if (firstSectionData.title && subHeaderTitle) {
+                subHeaderTitle.textContent = firstSectionData.title;
+            }
+            if (firstSectionData.color && subHeader) {
+                subHeader.style.backgroundColor = firstSectionData.color;
+            }
+        }
+    }
     
-    // Setup inter-module communication
-    
-    // Listen for sidebar updates
-    window.addEventListener('updateSidebar', (e) => {
-        const { index } = e.detail;
-        sidebar.updateActiveLink(index);
-    });
-    
-    // Listen for carousel reset requests
-    window.addEventListener('resetCarousel', (e) => {
-        const { section } = e.detail;
-        carousel.resetCarouselToFirst(section);
-    });
-    
-    // Listen for scroll-to-section requests
-    window.addEventListener('scrollToSection', (e) => {
-        const { targetSection, imageIndex } = e.detail;
-        scroll.transitionToSection(targetSection, imageIndex);
-    });
-
-    // Prevent scrolling when modals are open (fallback for browsers without :has() support)
+    // Modal handling - prevent body scroll when modals are open
     const modalCheckboxes = document.querySelectorAll('input[type="checkbox"][id*="modal-"]');
     
     function updateBodyScrollLock() {
         const anyModalOpen = Array.from(modalCheckboxes).some(checkbox => checkbox.checked);
-        
-        if (anyModalOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
+        document.body.style.overflow = anyModalOpen ? 'hidden' : '';
     }
     
-    // Listen for modal state changes
     modalCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateBodyScrollLock);
+    });
+    
+    // Close modal when clicking on background
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-background')) {
+            const checkbox = e.target.previousElementSibling;
+            if (checkbox && checkbox.type === 'checkbox') {
+                checkbox.checked = false;
+                updateBodyScrollLock();
+            }
+        }
     });
     
     // Initial check
