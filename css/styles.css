@@ -134,7 +134,7 @@ body {
 
 .carousel {
   position: relative;
-  height: 100%;
+  height: 400px; /* Fixed height so we can control what's visible */
   overflow: hidden;
   width: 100%;
   border-radius: 8px;
@@ -158,7 +158,7 @@ body {
 
 .carousel-item img {
     width: 100%;
-    height: auto;
+    height: 400px; /* Match the carousel height */
     object-fit: contain;
     display: block;
     margin: 0 auto;
@@ -168,7 +168,7 @@ body {
 .carousel-item {
     flex: none;
     width: 100%;
-    height: 100%;
+    height: 400px; /* Each item is exactly the carousel height */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -181,17 +181,17 @@ body {
   display: flex;
   width: 100%;
   min-height: 100vh;
-  align-items: stretch;
+  align-items: center;
   gap: 40px;
-  padding: 40px;
+  padding: 0 40px 40px 40px; /* Extra top padding for footer clearance */
   box-sizing: border-box;
 }
 
 .project-content {
-  flex: 1;
+  /* flex: 1; */
   max-width: 55%;
   padding-right: 20px;
-  overflow-y: auto;
+  overflow-y: hidden;
   max-height: 100vh;
   order: 1;
 }
@@ -282,7 +282,7 @@ body {
 @media (max-width: 1200px) {
   .project-container {
     gap: 30px;
-    padding: 30px;
+    padding: 60px 30px 30px 30px; /* Reduced but still offset top padding */
   }
   
   .project-content {
@@ -302,7 +302,7 @@ body {
 @media (max-width: 1024px) {
   .project-container {
     flex-direction: column;
-    padding: 20px;
+    padding: 40px 20px 20px 20px; /* Top padding for mobile */
     align-items: stretch;
   }
   
@@ -324,6 +324,15 @@ body {
     order: 2;
   }
   
+  .carousel {
+    height: 300px; /* Smaller carousel on mobile */
+  }
+  
+  .carousel-item,
+  .carousel-item img {
+    height: 300px; /* Match smaller carousel height */
+  }
+  
   #main-content {
     width: calc(100% - 60px);
   }
@@ -331,12 +340,21 @@ body {
 
 @media (max-width: 768px) {
   .project-container {
-    padding: 15px;
+    padding: 30px 15px 15px 15px; /* Smaller top padding on mobile */
   }
   
   .project-images {
     height: 40vh;
     min-height: 250px;
+  }
+  
+  .carousel {
+    height: 250px; /* Even smaller on smaller screens */
+  }
+  
+  .carousel-item,
+  .carousel-item img {
+    height: 250px; /* Match smaller carousel height */
   }
   
   .project-title {
