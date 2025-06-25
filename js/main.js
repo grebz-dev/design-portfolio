@@ -94,4 +94,39 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Initial check
     updateBodyScrollLock();
+    
+    // Scroll indicator functionality
+    document.addEventListener('click', (e) => {
+        // Handle section scroll indicators
+        if (e.target.classList.contains('scroll-arrow-up')) {
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                mainContent.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
+            }
+        }
+        
+        if (e.target.classList.contains('scroll-arrow-down')) {
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                mainContent.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+            }
+        }
+        
+        // Handle carousel scroll indicators
+        if (e.target.classList.contains('carousel-scroll-arrow-up')) {
+            const carousel = e.target.closest('.carousel');
+            const carouselTrack = carousel?.querySelector('.carousel-track');
+            if (carouselTrack) {
+                carouselTrack.scrollBy({ top: -400, behavior: 'smooth' });
+            }
+        }
+        
+        if (e.target.classList.contains('carousel-scroll-arrow-down')) {
+            const carousel = e.target.closest('.carousel');
+            const carouselTrack = carousel?.querySelector('.carousel-track');
+            if (carouselTrack) {
+                carouselTrack.scrollBy({ top: 400, behavior: 'smooth' });
+            }
+        }
+    });
 });

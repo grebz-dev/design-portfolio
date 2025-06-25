@@ -26,12 +26,18 @@
 		</div>
 		<div class="project-images">
 			<div class="carousel">
+				<div class="carousel-scroll-indicator carousel-scroll-indicator-top">
+					<div class="carousel-scroll-arrow carousel-scroll-arrow-up">▲</div>
+				</div>
 				<div class="carousel-track">
 					{% for image in page.media.images %}
 						<label for="modal-{{ page.slug }}-{{ loop.index }}" class="carousel-item">
 							<img src="{{ image.url }}" alt="{{ image.filename }}">
 						</label>
 					{% endfor %}
+				</div>
+				<div class="carousel-scroll-indicator carousel-scroll-indicator-bottom">
+					<div class="carousel-scroll-arrow carousel-scroll-arrow-down">▼</div>
 				</div>
 			</div>
 		</div>
