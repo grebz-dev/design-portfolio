@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-  <div id="main-content">
+  <div id="main-content" class="scroll-shadows">
     {% for module in page.collection() %}
       {{ module.content|raw }}
     {% endfor %}
