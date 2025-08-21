@@ -205,7 +205,7 @@ body {
 
 .carousel {
   position: relative;
-  height: 400px; /* Fixed height so we can control what's visible */
+  height: 100%;
   overflow: hidden;
   width: 100%;
   border-radius: 8px;
@@ -229,8 +229,8 @@ body {
 
 .carousel-item img {
     width: 100%;
-    height: 400px; /* Match the carousel height */
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
     display: block;
     margin: 0 auto;
     max-width: 100%;
@@ -239,7 +239,7 @@ body {
 .carousel-item {
     flex: none;
     width: 100%;
-    height: 400px; /* Each item is exactly the carousel height */
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -325,27 +325,28 @@ body {
 .project-container {
   display: flex;
   width: 100%;
-  min-height: 100vh;
-  align-items: center;
+  height: 100%;
+  align-items: stretch;
   gap: 40px;
-  padding: 0 40px 40px 40px; /* Extra top padding for footer clearance */
+  padding: 40px;
   box-sizing: border-box;
 }
 
 .project-content {
-  /* flex: 1; */
-  max-width: 55%;
+  max-width: 35%;
   padding-right: 20px;
-  overflow-y: hidden;
-  max-height: 100vh;
   order: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .project-images {
-  flex: 0 0 45%;
-  max-width: 45%;
-  min-height: 400px;
+  flex: 0 0 65%;
+  max-width: 65%;
   order: 2;
+  display: flex;
+  align-items: stretch;
 }
 
 .project-title {
@@ -457,7 +458,7 @@ body {
     padding-right: 0;
     max-height: none;
     overflow-y: visible;
-    order: 1;
+    order: 2;
     margin-bottom: 20px;
   }
   
@@ -466,7 +467,7 @@ body {
     max-width: 100%;
     height: 50vh;
     min-height: 300px;
-    order: 2;
+    order: 1;
   }
   
   .carousel {
@@ -480,59 +481,114 @@ body {
   
   #main-content {
     width: calc(100% - 60px);
+    scroll-snap-type: none; /* Allow free scrolling */
+  }
+
+  .section {
+    height: auto; /* Let sections take their natural height */
+    min-height: 50vh; /* Ensure sections take up at least half the screen */
+    padding-bottom: 40px; /* Add some space between projects */
   }
 }
 
 @media (max-width: 768px) {
-  .project-container {
-    padding: 30px 15px 15px 15px; /* Smaller top padding on mobile */
+  /* Hide desktop/primary headers on small screens */
+  #main-header,
+  .header { /* legacy header class */
+    display: none !important;
   }
-  
-  .project-images {
-    height: 40vh;
-    min-height: 250px;
-  }
-  
-  .carousel {
-    height: 250px; /* Even smaller on smaller screens */
-  }
-  
-  .carousel-item,
-  .carousel-item img {
-    height: 250px; /* Match smaller carousel height */
-  }
-  
-  .project-title {
-    font-size: 2em;
-  }
-  
-  #main-header {
-    height: 50px;
-  }
+
+  /* First sub-header at top (acts like section label for top project) */
   #sub-header {
-    top: 50px;
-  }
-  #sidebar {
-    top: 90px;
-    height: calc(100% - 90px);
-  }
-  #main-content {
-    margin-top: 90px;
-    width: calc(100% - 60px);
-    height: calc(100vh - 120px);
-  }
-  #main-footer {
+    position: fixed;
+    top: env(safe-area-inset-top, 0px);
     left: 0;
-    height: 30px;
+    right: 0;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    z-index: 950;
   }
-  
-  #main-footer p {
-    font-size: 12px;
+  #sub-header h2 { font-size: 0.95rem; margin: 0; }
+
+  /* Second sub-header aligned with second visible project */
+  #sub-header-2 {
+    position: fixed;
+    top: calc(50svh + env(safe-area-inset-top, 0px));
+    left: 0;
+    right: 0;
+    height: 32px;
+    display: none; /* toggled in JS when a second project is visible */
+    align-items: center;
+    padding: 0 12px;
+    z-index: 945;
+    background: rgba(0,0,0,0.05); /* fallback background if JS color missing */
   }
-  
+  #sub-header-title-2 { font-size: 0.95rem; margin: 0; color: #fff; }
+
+  /* Thin progress sidebar */
+  #sidebar {
+    position: fixed;
+    top: calc(32px + env(safe-area-inset-top, 0px));
+    height: calc(100% - 32px - env(safe-area-inset-top, 0px));
+    width: 8px;
+  }
+  #sidebar ul { gap: 2px; }
+  #sidebar li { height: 8px; border-bottom: none; box-shadow: none; }
+  #sidebar li.active { flex-grow: 1; height: auto; border-left: none; box-shadow: none; }
+  #sidebar li a { font-size: 0; text-indent: -9999px; color: transparent; line-height: 0; }
+
+  /* Main scroll container: two sections per screen with snapping */
+  #main-content {
+    margin: 0;
+    margin-left: 8px; /* offset for slim sidebar */
+    padding-top: calc(32px + env(safe-area-inset-top, 0px));
+    width: calc(100% - 8px);
+    height: 100svh; /* use dynamic viewport height on mobile */
+    height: 100dvh; /* modern browsers */
+    overflow-y: auto;
+    scroll-snap-type: y mandatory; /* re-enable snapping on mobile */
+  }
+
+  /* Each project section occupies half the screen height */
   .section {
-    height: calc(100vh - 120px);
+    height: 50svh;
+    min-height: 50svh;
+    overflow: hidden;
+    padding-bottom: 0;
+    scroll-snap-align: start;
   }
+
+  /* Project layout inside each half-screen section */
+  .project-container {
+    height: 100%;
+    padding: 16px 12px;
+    gap: 16px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .project-images {
+    order: 1;
+    height: 55%; /* give imagery majority of the half screen */
+    min-height: 0; /* allow shrinking */
+    max-width: 100%;
+    flex: none;
+  }
+  .carousel { height: 100%; }
+  .carousel-item, .carousel-item img { height: 100%; }
+
+  .project-content {
+    order: 2;
+    max-width: 100%;
+    padding-right: 0;
+    overflow: auto;
+    flex: 1 1 auto;
+  }
+  .project-title { font-size: 1.35rem; margin: 8px 0; }
+
+  /* Footer hidden on mobile */
+  #main-footer { display: none; }
 }
 
 /* Carousel modal */
@@ -777,5 +833,26 @@ body:has(input[type="checkbox"]:checked) {
   
   .carousel-scroll-indicator:hover {
     opacity: 0.8;
+  }
+}
+
+@media (max-width: 768px) {
+  html { scroll-padding-top: 0 !important; }
+
+  /* Non-interactive overlays so touch events pass to content */
+  #sub-header,
+  #sub-header-2 {
+    pointer-events: none;
+  }
+
+  #main-content {
+    scroll-padding-top: calc(32px + env(safe-area-inset-top, 0px));
+    scroll-snap-type: y mandatory;
+    scroll-snap-stop: always;
+  }
+
+  .section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 }
