@@ -114,11 +114,11 @@ body {
 
 #main-content {
   position: absolute;
-  margin-top: 100px;
-  margin-left: 60px;
-  margin-bottom: 40px; /* Account for footer height */
-  width: calc(100% - 60px);
-  height: calc(100vh - 140px);
+  top: 0;
+  left: 60px;
+  right: 0;
+  bottom: 40px; /* Account for footer height */
+  padding-top: 100px; /* Header height */
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
@@ -201,6 +201,7 @@ body {
   display: flex;
   align-items: stretch;
   scroll-snap-align: start;
+  scroll-margin-top: 100px;
 }
 
 .carousel {
