@@ -356,82 +356,12 @@ body {
 		max-height: calc(100vh - 2rem);
 	}
 	
-	/* Slightly smaller title for medium screens */
 	.modal-title {
 		font-size: 1.4rem;
 	}
 	
 	.modal-header {
 		padding: 1.2rem;
-	}
-}
-
-@media (max-width: 768px) {
-	/* Full-width/height modal with no margins for mobile */
-	.modal-container {
-		width: 100vw;
-		height: 100vh;
-		max-height: 100vh;
-		top: 0;
-		left: 0;
-		transform: translate(0, 0) scale(0.96);
-	}
-	
-	.modal-shell {
-		max-height: 100vh;
-	}
-	
-	.modal-toggle:checked ~ .modal-container {
-		transform: translate(0, 0) scale(1);
-	}
-	
-	.modal-title {
-		font-size: 1.2rem;
-	}
-	
-	.modal-header {
-		padding: 0.8rem 1rem;
-		gap: 0.5rem;
-	}
-}
-
-@media (max-height: 500px) {
-	.modal-container {
-		height: 100vh;
-		max-height: 100vh;
-		width: 100vw;
-		top: 0;
-		left: 0;
-		transform: translate(0, 0) scale(0.96);
-	}
-	
-	.modal-shell {
-		max-height: 100vh;
-	}
-	
-	.modal-toggle:checked ~ .modal-container {
-		transform: translate(0, 0) scale(1);
-	}
-
-	.modal-header {
-		gap: 0;
-		padding: .5rem;
-	}
-
-	.modal-title {
-		font-size: 1rem;
-	}
-
-	.modal-body {
-		padding: 0;
-	}
-	
-	.project-details-desktop {
-		display: none;
-	}
-
-	.project-details-mobile {
-		display: block;
 	}
 }
 
@@ -473,7 +403,6 @@ body {
 	@media (orientation: portrait) {
 		.project-gallery {
 			flex: 1 1 auto;
-			/* Switch to vertical scrolling for mobile portrait */
 			overflow-x: hidden;
 			overflow-y: scroll;
 			scroll-snap-type: y mandatory;
@@ -488,14 +417,12 @@ body {
 
 		.project-gallery-item {
 			flex: 0 0 80vh;
-			/* Control height of each slide */
 			height: 80vh;
 			min-height: 300px;
 			width: 100%;
 			scroll-snap-align: start;
 		}
 
-		/* Make description slide take less vertical space */
 		.project-details-mobile {
 			flex: 0 0 auto;
 			min-height: 300px;
@@ -503,11 +430,43 @@ body {
 			max-height: 80vh;
 		}
 
-		/* Customize scrollbar for vertical scrolling */
 		.project-gallery::-webkit-scrollbar {
 			width: 8px;
 			height: auto;
 		}
+	}
+}
+
+@media (max-width: 768px) {
+	/* Full-screen modal for mobile */
+	.modal-container {
+		width: 100vw;
+		height: 100vh;
+		max-height: 100vh;
+		top: 0;
+		left: 0;
+		transform: translate(0, 0) scale(0.96);
+	}
+	
+	.modal-shell {
+		max-height: 100vh;
+	}
+	
+	.modal-toggle:checked ~ .modal-container {
+		transform: translate(0, 0) scale(1);
+	}
+	
+	.modal-title {
+		font-size: 1.2rem;
+	}
+	
+	.modal-header {
+		padding: 0.8rem 1rem;
+		gap: 0.5rem;
+	}
+	
+	.modal-body {
+		padding: 0;
 	}
 }
 
@@ -533,20 +492,21 @@ body {
 		height: clamp(5rem, 28vh, 9rem);
 		width: clamp(2.2rem, 7vw, 3rem);
 	}
-
-	.modal-body {
-		padding: 1.5rem;
-	}
-
+	
 	.modal-title {
-		font-size: 1.4rem;
+		font-size: 1.1rem;
 	}
 	
-	/* Further reduce modal title and padding for smallest screens */
+	.modal-header {
+		padding: 0.6rem 0.8rem;
+	}
+}
+
+@media (max-height: 500px) {
 	.modal-container {
-		width: 100vw;
 		height: 100vh;
 		max-height: 100vh;
+		width: 100vw;
 		top: 0;
 		left: 0;
 		transform: translate(0, 0) scale(0.96);
@@ -559,16 +519,25 @@ body {
 	.modal-toggle:checked ~ .modal-container {
 		transform: translate(0, 0) scale(1);
 	}
-	
+
 	.modal-header {
-		padding: 0.6rem 0.8rem;
+		gap: 0;
+		padding: .5rem;
 	}
-	
+
 	.modal-title {
-		font-size: 1.1rem;
+		font-size: 1rem;
 	}
-	
+
 	.modal-body {
 		padding: 0;
+	}
+	
+	.project-details-desktop {
+		display: none;
+	}
+
+	.project-details-mobile {
+		display: block;
 	}
 }
