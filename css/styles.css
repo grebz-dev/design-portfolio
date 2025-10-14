@@ -372,6 +372,17 @@ body {
 		width: 100vw;
 		height: 100vh;
 		max-height: 100vh;
+		top: 0;
+		left: 0;
+		transform: translate(0, 0) scale(0.96);
+	}
+	
+	.modal-shell {
+		max-height: 100vh;
+	}
+	
+	.modal-toggle:checked ~ .modal-container {
+		transform: translate(0, 0) scale(1);
 	}
 	
 	.modal-title {
@@ -388,7 +399,18 @@ body {
 	.modal-container {
 		height: 100vh;
 		max-height: 100vh;
-		width: 100vw; /* Ensure full width */
+		width: 100vw;
+		top: 0;
+		left: 0;
+		transform: translate(0, 0) scale(0.96);
+	}
+	
+	.modal-shell {
+		max-height: 100vh;
+	}
+	
+	.modal-toggle:checked ~ .modal-container {
+		transform: translate(0, 0) scale(1);
 	}
 
 	.modal-header {
@@ -525,6 +547,17 @@ body {
 		width: 100vw;
 		height: 100vh;
 		max-height: 100vh;
+		top: 0;
+		left: 0;
+		transform: translate(0, 0) scale(0.96);
+	}
+	
+	.modal-shell {
+		max-height: 100vh;
+	}
+	
+	.modal-toggle:checked ~ .modal-container {
+		transform: translate(0, 0) scale(1);
 	}
 	
 	.modal-header {
@@ -536,6 +569,6 @@ body {
 	}
 	
 	.modal-body {
-		padding: 1rem;
+		padding: 0;
 	}
 }
