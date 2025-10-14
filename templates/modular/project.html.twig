@@ -17,12 +17,6 @@
 		<div class="project-gallery">
 			{% if slide_count > 0 %}
 				<div class="project-gallery-track">
-					{% for image in images %}
-						<figure class="project-gallery-item">
-							<img src="{{ image.url }}" alt="{{ image.meta.alt ?: page.header.title ?: page.title }} image {{ loop.index }}">
-						</figure>
-					{% endfor %}
-					
 					<!-- Add project details as a carousel item for mobile view -->
 					<div class="project-gallery-item project-details-mobile">
 						<div class="project-details-content">
@@ -36,6 +30,11 @@
 							</div>
 						</div>
 					</div>
+					{% for image in images %}
+						<figure class="project-gallery-item">
+							<img src="{{ image.url }}" alt="{{ image.meta.alt ?: page.header.title ?: page.title }} image {{ loop.index }}">
+						</figure>
+					{% endfor %}
 				</div>
 			{% else %}
 				<div class="project-gallery-empty">
