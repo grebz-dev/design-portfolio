@@ -349,10 +349,6 @@ body {
 		flex-direction: column;
 	}
 
-	.project-gallery {
-		overflow: hidden;
-	}
-
 	.project-gallery-track {
 		padding: 1rem 0 1.5rem;
 		scroll-padding: 0;
