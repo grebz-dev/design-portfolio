@@ -5,10 +5,15 @@
     <div class="project-grid">
       {% for module in page.collection() %}
         {% set project_slug = module.slug %}
-  {% set project_title = module.header.title ?: module.title ?: 'Project' %}
+        {% set project_title = module.header.title ?: module.title ?: 'Project' %}
         {% set first_image = module.media.images|first %}
+        {% set theme_color = module.header.color ?: '#a0c2ff' %}
+        {% set background_color = module.header.bgcolor ?: 'rgba(15,16,24,1)' %}
+        {% set accent_color = module.header.primary_color ?: theme_color %}
+        {% set secondary_color = module.header.secondary_color ?: 'rgba(255,255,255,0.65)' %}
 
-        <article class="project-card">
+        <article class="project-card" data-color="{{ theme_color }}" data-title="{{ project_title }}" 
+                 style="--project-bg: {{ background_color }}; --project-accent: {{ accent_color }}; --project-secondary: {{ secondary_color }};">
           <input type="checkbox" id="project-modal-toggle-{{ project_slug }}" class="modal-toggle" aria-hidden="true">
 
           <label for="project-modal-toggle-{{ project_slug }}" class="project-card-trigger" role="button" tabindex="0" aria-controls="project-modal-{{ project_slug }}" aria-haspopup="dialog">

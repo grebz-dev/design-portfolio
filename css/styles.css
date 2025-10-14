@@ -53,6 +53,25 @@ body {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+	background-color: var(--project-bg, #11121d);
+}
+
+/* Add a pseudo-element to create a lightening overlay effect */
+.project-card::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(255, 255, 255, 0.9);
+	pointer-events: none;
+}
+
+/* Make sure project card contents are positioned above the overlay */
+.project-card > * {
+	position: relative;
+	z-index: 1;
 }
 
 .modal-toggle {
