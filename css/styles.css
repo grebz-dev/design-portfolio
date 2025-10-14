@@ -350,7 +350,7 @@ body {
 	}
 
 	.project-gallery {
-		overflow: visible;
+		overflow: hidden;
 	}
 
 	.project-gallery-track {
