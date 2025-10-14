@@ -416,7 +416,7 @@ body {
 		}
 
 		.project-gallery-item {
-			flex: 0 0 80vh;
+			flex: 0 0;
 			height: 80vh;
 			min-height: 300px;
 			width: 100%;
@@ -425,9 +425,12 @@ body {
 
 		.project-details-mobile {
 			flex: 0 0 auto;
-			min-height: 300px;
 			height: auto;
 			max-height: 80vh;
+		}
+		
+		.project-details-content {
+			height: auto;
 		}
 
 		.project-gallery::-webkit-scrollbar {
@@ -463,10 +466,6 @@ body {
 	.project-gallery-track {
 		padding: 0;
 		scroll-padding: 0;
-	}
-
-	.project-gallery-item {
-		flex: 0 0 100%;
 	}
 
 	.carousel-button {
@@ -520,5 +519,6 @@ body {
 
 	.project-details-mobile {
 		display: block;
+		max-width: 50%;
 	}
 }
