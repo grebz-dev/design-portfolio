@@ -344,6 +344,24 @@ body {
 	}
 }
 
+@media (max-height: 500px) {
+	.modal-container {
+		height: 100vh;
+		max-height: 100vh;
+	}
+	.modal-header {
+		gap: 0;
+		padding: .5rem;
+	}
+	.modal-title {
+		font-size: 1rem;
+		
+	}
+	.modal-body {
+		padding: 0;
+	}
+}
+
 @media (max-width: 880px) {
 	.project-layout {
 		flex-direction: column;
