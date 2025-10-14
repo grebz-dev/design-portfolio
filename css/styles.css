@@ -89,10 +89,28 @@ body {
 	flex: 1 1 52%;
 	min-width: 0;
 	position: relative;
-	overflow: hidden;
+	overflow-x: scroll;
+	overflow-y: hidden;
 	display: flex;
 	align-items: stretch;
 	justify-content: flex-start;
+	scroll-snap-type: x mandatory;
+	--scrollbarBG: rgba(255, 255, 255, 0.05);
+	--thumbBG: var(--project-accent, black);
+	scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+
+.project-gallery::-webkit-scrollbar {
+	height: 8px;
+}
+
+.project-gallery::-webkit-scrollbar-track {
+	background: var(--scrollbarBG);
+}
+
+.project-gallery::-webkit-scrollbar-thumb {
+	background-color: var(--thumbBG);
+	border-radius: 4px;
 }
 
 .project-gallery-track {
@@ -104,6 +122,7 @@ body {
 	transform: translateX(0%);
 	transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 	will-change: transform;
+	padding: 0;
 }
 
 .project-gallery-item {
@@ -114,6 +133,7 @@ body {
 	overflow: hidden;
 	display: block;
 	margin: 0;
+	scroll-snap-align: start;
 }
 
 .project-gallery-item img {
