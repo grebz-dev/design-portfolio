@@ -22,6 +22,20 @@
 							<img src="{{ image.url }}" alt="{{ image.meta.alt ?: page.header.title ?: page.title }} image {{ loop.index }}">
 						</figure>
 					{% endfor %}
+					
+					<!-- Add project details as a carousel item for mobile view -->
+					<div class="project-gallery-item project-details-mobile">
+						<div class="project-details-content">
+							<header class="project-details-header">
+								{% if page.header.subtitle %}
+									<p class="project-subtitle">{{ page.header.subtitle }}</p>
+								{% endif %}
+							</header>
+							<div class="project-body">
+								{{ page.rawMarkdown|markdown|raw }}
+							</div>
+						</div>
+					</div>
 				</div>
 			{% else %}
 				<div class="project-gallery-empty">
@@ -29,7 +43,7 @@
 				</div>
 			{% endif %}
 		</div>
-		<div class="project-details">
+		<div class="project-details project-details-desktop">
 			<header class="project-details-header">
 				{% if page.header.subtitle %}
 					<p class="project-subtitle">{{ page.header.subtitle }}</p>
