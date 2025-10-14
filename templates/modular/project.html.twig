@@ -1,12 +1,10 @@
 {% set images = page.media.images %}
 {% set slide_count = images|length %}
-{% set theme_color = page.header.color ?: '#a0c2ff' %}
+{% set project_color = page.header.color ?: '#a0c2ff' %}
 {% set background_color = page.header.bgcolor ?: 'rgba(15,16,24,1)' %}
-{% set accent_color = page.header.primary_color ?: theme_color %}
-{% set secondary_color = page.header.secondary_color ?: 'rgba(255,255,255,0.65)' %}
 
-<div id="{{ page.slug }}" class="project" data-color="{{ theme_color }}" data-title="{{ page.header.title }}"
-	style="--project-bg: {{ background_color }}; --project-accent: {{ accent_color }}; --project-secondary: {{ secondary_color }};">
+<div id="{{ page.slug }}" class="project" data-color="{{ project_color }}" data-title="{{ page.header.title }}"
+	style="--project-bg: {{ background_color }}; --project-accent: {{ project_color }};">
 	{% if slide_count > 1 %}
 		{% for image in images %}
 			<input type="radio" name="carousel-{{ page.slug }}" id="carousel-{{ page.slug }}-slide-{{ loop.index }}" class="carousel-toggle" {% if loop.first %}checked{% endif %}>

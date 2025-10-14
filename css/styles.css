@@ -334,7 +334,7 @@ body {
 .project-subtitle {
 	margin: 0;
 	font-size: 1.1rem;
-	color: var(--project-secondary, rgba(242, 244, 255, 0.75));
+	color: var(--project-accent, rgba(242, 244, 255, 0.75));
 }
 
 .project-body :where(p, ul, ol) {
