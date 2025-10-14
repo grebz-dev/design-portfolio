@@ -15,14 +15,7 @@
 				{% do assets.addCss('theme://css/custom.css') %}
 				{% do assets.addCss('theme://css/styles.css', 99) %}
 			{% endblock %}
-			{% block javascripts %}
-				{% do assets.addJs('theme://js/main.js') %}
-			{% endblock %}
-
-			{% block assets deferred %}
-				{{ assets.css()|raw }}
-				{{ assets.js()|raw }}
-			{% endblock %}
+			{{ assets.css()|raw }}
 		{% endblock head %}
 	</head>
 	<body>
@@ -30,25 +23,6 @@
 			<header id="main-header">
 				<h1>{{ site.title }}</h1>
 			</header>
-		{% endblock %}
-		{% block subheader %}
-			<div id="sub-header">
-				<h2 id="sub-header-title">{{ page.header.title }}</h2>
-			</div>
-			<div id="sub-header-2" style="display:none;">
-				<h2 id="sub-header-title-2"></h2>
-			</div>
-		{% endblock %}
-		{% block sidebar %}
-			<nav id="sidebar">
-				<ul>
-					{% for module in page.collection() %}
-						<li data-section="{{ loop.index }}">
-							<a href="#{{ module.slug }}">{{ loop.index }}</a>
-						</li>
-					{% endfor %}
-				</ul>
-			</nav>
 		{% endblock %}
 		{% block content %}
 			<div id="main-content"></div>

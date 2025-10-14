@@ -1,9 +1,44 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-  <div id="main-content" class="scroll-shadows">
-    {% for module in page.collection() %}
-      {{ module.content|raw }}
-    {% endfor %}
+  <div id="main-content">
+    <div class="project-grid">
+      {% for module in page.collection() %}
+        {% set project_slug = module.slug %}
+  {% set project_title = module.header.title ?: module.title ?: 'Project' %}
+        {% set first_image = module.media.images|first %}
+
+        <article class="project-card">
+          <input type="checkbox" id="project-modal-toggle-{{ project_slug }}" class="modal-toggle" aria-hidden="true">
+
+          <label for="project-modal-toggle-{{ project_slug }}" class="project-card-trigger" role="button" tabindex="0" aria-controls="project-modal-{{ project_slug }}" aria-haspopup="dialog">
+            {% if first_image %}
+              <img class="project-card-image" src="{{ first_image.url }}" alt="{{ project_title }} preview">
+            {% else %}
+              <div class="project-card-placeholder" aria-hidden="true">
+                <span>{{ project_title|slice(0, 1)|upper }}</span>
+              </div>
+            {% endif %}
+            <div class="project-card-overlay">
+              <h2 class="project-card-title">{{ project_title }}</h2>
+            </div>
+          </label>
+
+          <label for="project-modal-toggle-{{ project_slug }}" class="modal-backdrop" aria-hidden="true"></label>
+
+          <div id="project-modal-{{ project_slug }}" class="modal-container" role="dialog" aria-modal="true" aria-labelledby="project-heading-{{ project_slug }}">
+            <div class="modal-shell">
+              <header class="modal-header">
+                <h2 id="project-heading-{{ project_slug }}" class="modal-title">{{ project_title }}</h2>
+                <label for="project-modal-toggle-{{ project_slug }}" class="modal-close" role="button" tabindex="0" aria-label="Close project" aria-controls="project-modal-{{ project_slug }}">&times;</label>
+              </header>
+              <div class="modal-body">
+                {% include 'modular/project.html.twig' with {'page': module} only %}
+              </div>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
   </div>
 {% endblock %}

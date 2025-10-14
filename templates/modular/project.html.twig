@@ -1,38 +1,42 @@
-<div id="{{ page.slug }}" class="section" data-color="{{ page.header.color }}" data-title="{{ page.header.title }}">
-	<div class="project-container" style="background-color:{{ page.header.bgcolor }}">
-		{# Create a modal for each image #}
-		{% for image in page.media.images %}
-			<input type="checkbox" id="modal-{{ page.slug }}-{{ loop.index }}">
-			<label for="modal-{{ page.slug }}-{{ loop.index }}" class="modal-background"></label>
-			<div class="modal">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h2>{{ page.header.title }}</h2>
-						<label for="modal-{{ page.slug }}-{{ loop.index }}">
-							<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAdVBMVEUAAABNTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU1NTU0N3NIOAAAAJnRSTlMAAQIDBAUGBwgRFRYZGiEjQ3l7hYaqtLm8vsDFx87a4uvv8fP1+bbY9ZEAAAB8SURBVBhXXY5LFoJAAMOCIP4VBRXEv5j7H9HFDOizu2TRFljedgCQHeocWHVaAWStXnKyl2oVWI+kd1XLvFV1D7Ng3qrWKYMZ+MdEhk3gbhw59KvlH0eTnf2mgiRwvQ7NW6aqNmncukKhnvo/zzlQ2PR/HgsAJkncH6XwAcr0FUY5BVeFAAAAAElFTkSuQmCC" width="16" height="16" alt="Close">
-						</label>
-					</div>
-					<div class="modal-body">
-						<img src="{{ image.url }}" alt="{{ image.filename }}">
-					</div>
-				</div>
-			</div>
+{% set images = page.media.images %}
+{% set slide_count = images|length %}
+{% set theme_color = page.header.color ?: '#a0c2ff' %}
+{% set background_color = page.header.bgcolor ?: 'rgba(15,16,24,1)' %}
+{% set accent_color = page.header.primary_color ?: theme_color %}
+{% set secondary_color = page.header.secondary_color ?: 'rgba(255,255,255,0.65)' %}
+
+<div id="{{ page.slug }}" class="project" data-color="{{ theme_color }}" data-title="{{ page.header.title }}"
+	style="--project-bg: {{ background_color }}; --project-accent: {{ accent_color }}; --project-secondary: {{ secondary_color }};">
+	{% if slide_count > 1 %}
+		{% for image in images %}
+			<input type="radio" name="carousel-{{ page.slug }}" id="carousel-{{ page.slug }}-slide-{{ loop.index }}" class="carousel-toggle" {% if loop.first %}checked{% endif %}>
 		{% endfor %}
-		<div class="project-content">
-			<h1 class="project-title">{{ page.header.title }}</h1>
-			<div class="content">
-				{{ page.content|raw }}
-			</div>
-		</div>
-		<div class="project-images">
-			<div class="carousel scroll-shadows">
-				<div class="carousel-track">
-					{% for image in page.media.images %}
-						<label for="modal-{{ page.slug }}-{{ loop.index }}" class="carousel-item">
-							<img src="{{ image.url }}" alt="{{ image.filename }}">
-						</label>
+	{% endif %}
+
+	<div class="project-layout">
+		<div class="project-gallery">
+			{% if slide_count > 0 %}
+				<div class="project-gallery-track">
+					{% for image in images %}
+						<figure class="project-gallery-item">
+							<img src="{{ image.url }}" alt="{{ image.meta.alt ?: page.header.title ?: page.title }} image {{ loop.index }}">
+						</figure>
 					{% endfor %}
 				</div>
+			{% else %}
+				<div class="project-gallery-empty">
+					<p>No images available for this project.</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="project-details">
+			<header class="project-details-header">
+				{% if page.header.subtitle %}
+					<p class="project-subtitle">{{ page.header.subtitle }}</p>
+				{% endif %}
+			</header>
+			<div class="project-body">
+				{{ page.rawMarkdown|markdown|raw }}
 			</div>
 		</div>
 	</div>
