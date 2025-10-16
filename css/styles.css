@@ -21,6 +21,10 @@ body {
 	color: #f2f4ff;
 }
 
+#main-header {
+	padding-left: 4em;
+}
+
 #main-header,
 #main-footer {
 	width: 100%;
