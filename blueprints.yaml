@@ -2,7 +2,7 @@ name: Design Portfolio
 slug: design-portfolio
 type: theme
 version: 0.1.0
-description: A single-page continuously scrolling portfolio theme with project image carousels.
+description: A grid-modal design portfolio with project image carousels and details.
 icon: rebel
 author:
   name: grebz-dev
