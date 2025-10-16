@@ -20,13 +20,18 @@ dependencies:
 form:
   validation: loose
   fields:
-    dropdown.enabled:
-        type: toggle
-        label: Dropdown in Menu
-        highlight: 1
-        default: 1
-        options:
-          1: PLUGIN_ADMIN.ENABLED
-          0: PLUGIN_ADMIN.DISABLED
-        validate:
-          type: bool
+    site_background:
+      type: colorpicker
+      label: Site Background Color
+      default: '#ffefb8'
+      help: Sets the overall background color for the site.
+    header_background:
+      type: colorpicker
+      label: Header Background Color
+      default: '#ffefb8'
+      help: Sets the background color for the main header.
+    footer_text:
+      type: text
+      label: Footer Text
+      default: '© 2025 Grav. All rights reserved.'
+      help: The text to display in the site footer.

@@ -18,9 +18,9 @@
 			{{ assets.css()|raw }}
 		{% endblock head %}
 	</head>
-	<body>
+	<body style="background-color: {{ grav.theme.config.site_background|default('#ffefb8') }};">
 		{% block header %}
-			<header id="main-header">
+			<header id="main-header" style="background-color: {{ grav.theme.config.header_background|default('#ffefb8') }};">
 				<h1>{{ site.title }}</h1>
 			</header>
 		{% endblock %}
@@ -30,10 +30,7 @@
 		{% block footer %}
 			<footer id="main-footer">
 				<div class="wrapper padding">
-					<p>&copy;
-						{{ "now"|date("Y") }}
-						{{ site.title }}. All rights reserved.
-					</p>
+					<p>{{ grav.theme.config.footer_text|default('&copy; ' ~ "now"|date("Y") ~ ' ' ~ site.title ~ '. All rights reserved.')|raw }}</p>
 				</div>
 			</footer>
 		{% endblock %}
