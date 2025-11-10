@@ -1,12 +1,12 @@
-{% set images = page.media.images %}
-{% set slide_count = images|length %}
+{% set content_slides = page.header.items %}
+{% set slide_count = content_slides|length %}
 {% set project_color = page.header.color ?: '#a0c2ff' %}
 {% set background_color = page.header.bgcolor ?: 'rgba(15,16,24,1)' %}
 
 <div id="{{ page.slug }}" class="project" data-color="{{ project_color }}" data-title="{{ page.header.title }}"
 	style="--project-bg: {{ background_color }}; --project-accent: {{ project_color }};">
 	{% if slide_count > 1 %}
-		{% for image in images %}
+		{% for slide in content_slides %}
 			<input type="radio" name="carousel-{{ page.slug }}" id="carousel-{{ page.slug }}-slide-{{ loop.index }}" class="carousel-toggle" {% if loop.first %}checked{% endif %}>
 		{% endfor %}
 	{% endif %}
@@ -15,40 +15,30 @@
 		<div class="project-gallery">
 			{% if slide_count > 0 %}
 				<div class="project-gallery-track">
-					<!-- Add project details as a carousel item for mobile view -->
-					<div class="project-gallery-item project-details-mobile">
-						<div class="project-details-content">
-							<header class="project-details-header">
-								{% if page.header.subtitle %}
-									<p class="project-subtitle">{{ page.header.subtitle }}</p>
-								{% endif %}
-							</header>
-							<div class="project-body">
-								{{ page.rawMarkdown|markdown|raw }}
+					{% for slide in content_slides %}
+						{% if slide.element_selector == 'text' and slide.text.text %}
+							<div class="project-gallery-item project-details-mobile">
+								<div class="project-details-content">
+									<div class="project-body">
+										{{ slide.text.text|markdown|raw }}
+									</div>
+								</div>
 							</div>
-						</div>
-					</div>
-					{% for image in images %}
-						<figure class="project-gallery-item">
-							<img src="{{ image.url }}" alt="{{ image.meta.alt ?: page.header.title ?: page.title }} image {{ loop.index }}">
-						</figure>
+						{% elseif slide.element_selector == 'image' and slide.image.image %}
+							{% set image_file = page.media[slide.image.image|first.name] %}
+							{% if image_file %}
+								<figure class="project-gallery-item">
+									<img src="{{ image_file.url }}" alt="{{ image_file.meta.alt ?: page.header.title ?: page.title }} image {{ loop.index }}">
+								</figure>
+							{% endif %}
+						{% endif %}
 					{% endfor %}
 				</div>
 			{% else %}
 				<div class="project-gallery-empty">
-					<p>No images available for this project.</p>
+					<p>No content available for this project.</p>
 				</div>
 			{% endif %}
-		</div>
-		<div class="project-details project-details-desktop">
-			<header class="project-details-header">
-				{% if page.header.subtitle %}
-					<p class="project-subtitle">{{ page.header.subtitle }}</p>
-				{% endif %}
-			</header>
-			<div class="project-body">
-				{{ page.rawMarkdown|markdown|raw }}
-			</div>
 		</div>
 	</div>
 </div>

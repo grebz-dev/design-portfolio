@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+ {% extends 'base.html.twig' %}
 
 {% block content %}
   <div id="main-content">
@@ -6,7 +6,18 @@
       {% for module in page.collection() %}
         {% set project_slug = module.slug %}
         {% set project_title = module.header.title ?: module.title ?: 'Project' %}
-        {% set first_image = module.media.images|first %}
+        {% set first_image = null %}
+        {% if module.header.items %}
+          {% for item in module.header.items %}
+            {% if first_image is null and item.element_selector == 'image' and item.image.image %}
+              {% set image_name = item.image.image|first.name %}
+              {% set first_image = module.media[image_name] %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        {% if first_image is null %}
+            {% set first_image = module.media.images|first %}
+        {% endif %}
         {% set project_color = module.header.color ?: '#a0c2ff' %}
         {% set background_color = module.header.bgcolor ?: 'rgba(24, 15, 15, 1)' %}
 

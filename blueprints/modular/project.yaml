@@ -1,15 +1,60 @@
 title: Project
-'@extends': default
 
 form:
   fields:
-    header.color:
-      type: colorpicker
-      label: Primary Color
-      description: Main color for this project section
-      default: '#FF5733'
-    header.bgcolor:
-      type: colorpicker
-      label: Secondary Color
-      description: Secondary accent color for this project. Used for backgrounds and highlights.
-      default: '#33A1FF'
+    tabs:
+      type: tabs
+      active: 1
+      fields:
+        content:
+          type: tab
+          title: Content
+          fields:
+            header.title:
+              type: text
+              label: Project Title
+              description: The title of the project to be displayed.
+              default: 'Project Title'
+            header.color:
+              type: colorpicker
+              label: Primary Color
+              description: Main color for this project section
+              default: '#FF5733'
+            header.bgcolor:
+              type: colorpicker
+              label: Secondary Color
+              description: Secondary accent color for this project. Used for backgrounds and highlights.
+              default: '#33A1FF'
+
+            header.items:
+              type: list
+              min: 1
+              label: Content
+              description: Add content slides to showcase your project.
+              default:
+              fields:
+                .element_selector:
+                  type: elements
+                  label: Content Type
+                  default: text
+                  options:
+                    text: Text
+                    image: Image
+                  fields:
+                    text:
+                      type: element
+                      fields:
+                        .text:
+                          type: textarea
+                          markdown: true
+                    image:
+                      type: element
+                      fields:
+                        .image:
+                          type: file
+                          label: Image
+                          destination: 'user://pages/images'
+                          multiple: false
+                          accept:
+                            - image/*
+                        
