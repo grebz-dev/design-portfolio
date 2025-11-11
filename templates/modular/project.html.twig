@@ -17,7 +17,7 @@
 				<div class="project-gallery-track">
 					{% for slide in content_slides %}
 						{% if slide.element_selector == 'text' and slide.text.text %}
-							<div class="project-gallery-item project-details-mobile">
+							<div class="project-gallery-item project-details">
 								<div class="project-details-content">
 									<div class="project-body">
 										{{ slide.text.text|markdown|raw }}

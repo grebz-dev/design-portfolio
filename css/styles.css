@@ -313,15 +313,7 @@ body {
 }
 
 .project-details {
-	flex: 1 1 0;
-	min-width: 0;
-	background: rgba(17, 19, 29, 0.6);
-	padding: 1rem;
-	align-content: center;
-}
-
-.project-details-mobile {
-	display: none;
+	display: block;
 	overflow-y: auto;
 	background: rgba(17, 19, 29, 0.6);
 }
@@ -392,15 +384,7 @@ body {
 	.project-details {
 		padding: 1.5rem;
 	}
-
-	.project-details-desktop {
-		display: none;
-	}
-
-	.project-details-mobile {
-		display: block;
-	}
-
+	
 	@media (orientation: portrait) {
 		.project-gallery {
 			flex: 1 1 auto;
@@ -423,7 +407,7 @@ body {
 			scroll-snap-align: start;
 		}
 
-		.project-details-mobile {
+		.project-details {
 			flex: 0 0 auto;
 			height: auto;
 			max-height: 80vh;
@@ -516,13 +500,8 @@ body {
 	.project {
 		padding: 0;
 	}
-	
-	.project-details-desktop {
-		display: none;
-	}
 
-	.project-details-mobile {
-		display: block;
+	.project-details {
 		max-width: 40%;
 		
 		.project-details-content {
@@ -530,7 +509,7 @@ body {
 		}
 	}
 	
-	.project-details-mobile.project-gallery-item {
+	.project-details.project-gallery-item {
 		align-content: center;
 	}
 }
