@@ -11,6 +11,15 @@
 				{% endif %}
 				{{ site.title }}
 			</title>
+			
+			{# Favicon links #}
+			{% if has_favicon %}
+				<link rel="icon" type="image/x-icon" href="{{ url('theme://images/favicon.ico')|e }}">
+				<link rel="icon" type="image/png" sizes="16x16" href="{{ url('theme://images/favicon-16x16.png')|e }}">
+				<link rel="icon" type="image/png" sizes="32x32" href="{{ url('theme://images/favicon-32x32.png')|e }}">
+				<link rel="apple-touch-icon" sizes="180x180" href="{{ url('theme://images/apple-touch-icon.png')|e }}">
+			{% endif %}
+			
 			{% block stylesheets %}
 				{% do assets.addCss('theme://css/custom.css') %}
 				{% do assets.addCss('theme://css/styles.css', 99) %}
