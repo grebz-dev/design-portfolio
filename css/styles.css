@@ -185,6 +185,33 @@ body {
 	object-fit: cover;
 }
 
+/* Video embed styles */
+.project-video {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.5);
+	width: 100%;
+	min-width: 100%;
+}
+
+.project-video .grav-youtube {
+	position: relative;
+	width: 100%;
+	height: 0;
+	padding-bottom: 56.25%; /* 16:9 aspect ratio */
+	overflow: hidden;
+}
+
+.project-video .grav-youtube iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border: none;
+}
+
 .project-gallery-empty {
 	padding: 2rem;
 	background: rgba(255, 255, 255, 0.08);

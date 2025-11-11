@@ -31,6 +31,31 @@
 									<img src="{{ image_file.url }}" alt="{{ image_file.meta.alt ?: page.header.title ?: page.title }} image {{ loop.index }}">
 								</figure>
 							{% endif %}
+						{% elseif slide.element_selector == 'video' and slide.video.video_url %}
+							{% set video_url = slide.video.video_url %}
+							{% set video_id = null %}
+							
+							{# Extract YouTube video ID from various URL formats #}
+							{% if 'youtube.com/watch' in video_url %}
+								{% set video_id = video_url|split('v=')[1]|split('&')[0] %}
+							{% elseif 'youtu.be/' in video_url %}
+								{% set video_id = video_url|split('youtu.be/')[1]|split('?')[0] %}
+							{% elseif 'youtube.com/embed/' in video_url %}
+								{% set video_id = video_url|split('embed/')[1]|split('?')[0] %}
+							{% endif %}
+							
+							{% if video_id %}
+								<div class="project-gallery-item project-video">
+									<div class="grav-youtube">
+										<iframe src="https://www.youtube.com/embed/{{ video_id }}" 
+											frameborder="0" 
+											allowfullscreen
+											allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+											loading="lazy">
+										</iframe>
+									</div>
+								</div>
+							{% endif %}
 						{% endif %}
 					{% endfor %}
 				</div>

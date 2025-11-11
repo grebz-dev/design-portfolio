@@ -40,6 +40,7 @@ form:
                   options:
                     text: Text
                     image: Image
+                    video: Video
                   fields:
                     text:
                       type: element
@@ -57,4 +58,10 @@ form:
                           multiple: false
                           accept:
                             - image/*
-                        
+                    video:
+                      type: element
+                      fields:
+                        .video_url:
+                          type: text
+                          label: Video URL
+                          description: URL of the video (e.g., YouTube, Vimeo).
