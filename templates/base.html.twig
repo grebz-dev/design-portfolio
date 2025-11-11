@@ -37,6 +37,28 @@
 					{% endif %}
 					{{ site.title }}
 				</h1>
+				<nav class="header-socials" aria-label="Social media links">
+					{% if grav.theme.config.github %}
+						<a href="{{ grav.theme.config.github }}" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub">
+							<img src="{{ url('theme://images/socials/github.png')|e }}" alt="GitHub" />
+						</a>
+					{% endif %}
+					{% if grav.theme.config.linkedin %}
+						<a href="{{ grav.theme.config.linkedin }}" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn">
+							<img src="{{ url('theme://images/socials/linkedin.png')|e }}" alt="LinkedIn" />
+						</a>
+					{% endif %}
+					{% if grav.theme.config.twitter %}
+						<a href="{{ grav.theme.config.twitter }}" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Twitter">
+							<img src="{{ url('theme://images/socials/twitter.png')|e }}" alt="Twitter" />
+						</a>
+					{% endif %}
+					{% if grav.theme.config.instagram %}
+						<a href="{{ grav.theme.config.instagram }}" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
+							<img src="{{ url('theme://images/socials/instagram.png')|e }}" alt="Instagram" />
+						</a>
+					{% endif %}
+				</nav>
 			</header>
 		{% endblock %}
 		{% block content %}
