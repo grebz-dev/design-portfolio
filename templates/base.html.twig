@@ -40,5 +40,9 @@
 				</div>
 			</footer>
 		{% endblock %}
+		{% block javascripts %}
+			{% do assets.addJs('theme://js/pagescroll.js', {group: 'bottom'}) %}
+		{% endblock %}
+		{{ assets.js('bottom')|raw }}
 	</body>
 </html>

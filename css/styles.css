@@ -21,6 +21,13 @@ body {
 	color: #f2f4ff;
 }
 
+/* Modal scroll prevention */
+body.modal-open {
+	overflow: hidden !important;
+	position: fixed !important;
+	width: 100% !important;
+}
+
 #main-header {
 	padding: 1rem clamp(1rem, 4vw, 4em);
 }
