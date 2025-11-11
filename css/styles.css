@@ -565,6 +565,12 @@ body.modal-open {
 			width: 8px;
 			height: auto;
 		}
+		
+		/* Hide carousel buttons in vertical scrolling view */
+		.carousel-controls,
+		.carousel-button {
+			display: none !important;
+		}
 	}
 	.modal-container {
 		width: 100vw;
