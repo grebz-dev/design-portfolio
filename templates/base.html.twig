@@ -21,7 +21,13 @@
 	<body style="background-color: {{ grav.theme.config.site_background|default('#ffefb8') }};">
 		{% block header %}
 			<header id="main-header" style="background-color: {{ grav.theme.config.header_background|default('#ffefb8') }};">
-				<h1>{{ site.title }}</h1>
+				<h1>
+					{% if grav.theme.config.custom_logo %}
+						{% set logo = grav.theme.config.custom_logo is iterable ? grav.theme.config.custom_logo|first : grav.theme.config.custom_logo %}
+						<img src="{{ url('theme://images/' ~ logo.name)|e }}" alt="{{ site.title }}" class="logo-image" />
+					{% endif %}
+					{{ site.title }}
+				</h1>
 			</header>
 		{% endblock %}
 		{% block content %}

@@ -20,6 +20,15 @@ dependencies:
 form:
   validation: loose
   fields:
+    custom_logo:
+      type: file
+      label: Logo
+      size: large
+      destination: 'user/themes/design-portfolio/images'
+      multi: false
+      accept:
+        - image/*
+      help: Upload a logo to add to the header.
     site_background:
       type: colorpicker
       label: Site Background Color

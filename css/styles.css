@@ -25,6 +25,19 @@ body {
 	padding-left: 4em;
 }
 
+#main-header h1 {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+#main-header .logo-image {
+	height: 2.5rem;
+	width: auto;
+	max-width: 100%;
+	object-fit: contain;
+}
+
 #main-header,
 #main-footer {
 	width: 100%;
