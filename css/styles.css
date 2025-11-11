@@ -153,6 +153,7 @@ body {
 	display: flex;
 	width: 100%;
 	height: 100%;
+	max-height: calc(100dvh - 16rem);
 	padding: clamp(0.75rem, 1.5vw, 1.25rem) 0;
 	gap: 0;
 	transform: translateX(0%);
@@ -176,6 +177,7 @@ body {
 	width: 100%;
 	height: 100%;
 	display: block;
+	object-fit: cover;
 }
 
 .project-gallery-empty {
@@ -282,6 +284,7 @@ body {
 	flex: 1 1 auto;
 	overflow: auto;
 	padding: 1.5rem;
+	min-height: 0;
 	--scrollbarBG: rgba(255, 255, 255, 0.05);
 	--thumbBG: rgba(255, 255, 255, 0.2);
 }
@@ -311,7 +314,6 @@ body {
 
 .project {
 	width: 100%;
-	height: 100%;
 	background: var(--project-bg, #11121d);
 	padding: clamp(1rem, 2vw, 2.5rem);
 	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
@@ -322,7 +324,6 @@ body {
 	gap: 1rem;
 	flex-wrap: nowrap;
 	align-items: stretch;
-	height: 100%;
 }
 
 .project-details {
@@ -410,6 +411,7 @@ body {
 		.project-gallery-track {
 			flex-direction: column;
 			height: auto;
+			max-height: none;
 			width: 100%;
 		}
 
@@ -446,6 +448,7 @@ body {
 	
 	.modal-shell {
 		max-height: 100dvh;
+		height: 100dvh;
 	}
 	
 	.modal-toggle:checked ~ .modal-container {
@@ -454,6 +457,23 @@ body {
 	
 	.modal-body {
 		padding: 0;
+		max-height: none;
+		flex: 1 1 auto;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.project {
+		flex: 1 1 auto;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+	
+	.project-layout {
+		flex: 1 1 auto;
+		overflow: hidden;
 	}
 
 	.project-grid {
@@ -491,6 +511,7 @@ body {
 	
 	.modal-shell {
 		max-height: 100dvh;
+		height: 100dvh;
 	}
 	
 	.modal-toggle:checked ~ .modal-container {
@@ -500,6 +521,7 @@ body {
 	.modal-header {
 		gap: 0;
 		padding: .5rem;
+		flex-shrink: 0;
 	}
 
 	.modal-title {
@@ -508,21 +530,48 @@ body {
 
 	.modal-body {
 		padding: 0;
+		max-height: none;
+		flex: 1 1 auto;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
 	}
 	
 	.project {
 		padding: 0;
+		flex: 1 1 auto;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+	
+	.project-layout {
+		flex: 1 1 auto;
+		overflow: hidden;
+		display: flex;
+	}
+	
+	.project-gallery {
+		flex: 1 1 60%;
+		overflow-y: auto;
+	}
+	
+	.project-gallery-track {
+		max-height: 100%;
+		height: 100%;
 	}
 
 	.project-details {
 		max-width: 40%;
+		flex: 0 0 40%;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
 		
 		.project-details-content {
 			height: auto;
+			flex: 1 1 auto;
 		}
 	}
 	
-	.project-details.project-gallery-item {
-		align-content: center;
-	}
 }
