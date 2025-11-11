@@ -231,6 +231,96 @@ body.modal-open {
 	pointer-events: none;
 }
 
+/* Carousel navigation controls */
+.carousel-controls {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	pointer-events: none;
+	z-index: 10;
+	padding: 0 0.5rem;
+}
+
+.carousel-button {
+	pointer-events: auto;
+	background: rgba(0, 0, 0, 0.5);
+	color: #f2f4ff;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 0.25rem;
+	padding: 0;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: clamp(8rem, 35vh, 14rem);
+	width: clamp(3rem, 9vw, 4rem);
+	opacity: 0;
+	transition: opacity 0.3s ease, background 0.2s ease, transform 0.2s ease;
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+
+.carousel-button:hover,
+.carousel-button:focus {
+	background: rgba(0, 0, 0, 0.7);
+	border-color: rgba(255, 255, 255, 0.2);
+	transform: scale(1.05);
+	outline: none;
+}
+
+.carousel-button:active {
+	transform: scale(0.98);
+}
+
+.carousel-button__icon {
+	font-size: clamp(2rem, 5vw, 3rem);
+	line-height: 1;
+	font-weight: 300;
+	user-select: none;
+}
+
+/* Show buttons on hover or focus-within */
+.project-gallery:hover .carousel-button,
+.project-gallery:focus-within .carousel-button,
+.carousel-button:focus {
+	opacity: 1;
+}
+
+/* Subtle hint that buttons exist */
+.carousel-button {
+	opacity: 0.3;
+}
+
+.project-gallery:hover .carousel-button,
+.project-gallery:focus-within .carousel-button {
+	opacity: 0.9;
+}
+
+.carousel-button:hover,
+.carousel-button:focus {
+	opacity: 1 !important;
+}
+
+/* Position buttons */
+.carousel-button--prev {
+	margin-right: auto;
+}
+
+.carousel-button--next {
+	margin-left: auto;
+}
+
+/* Optional: Different styling when at boundaries */
+.carousel-button--at-start,
+.carousel-button--at-end {
+	opacity: 0.5;
+}
+
 .sr-only {
 	position: absolute;
 	width: 1px;
