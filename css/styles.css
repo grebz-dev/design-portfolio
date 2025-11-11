@@ -176,20 +176,24 @@ body.modal-open {
 
 .project-gallery-item {
 	flex: 0 0 auto;
-	max-width: 100%;
+	width: 100%;
 	height: 100%;
 	position: relative;
 	overflow: hidden;
-	display: block;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	margin: 0;
 	scroll-snap-align: start;
 }
 
 .project-gallery-item img {
-	width: 100%;
-	height: 100%;
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
 	display: block;
-	object-fit: cover;
+	object-fit: contain;
 }
 
 /* Video embed styles */
@@ -200,13 +204,15 @@ body.modal-open {
 	background: rgba(0, 0, 0, 0.5);
 	width: 100%;
 	min-width: 100%;
+	padding: 2rem;
 }
 
 .project-video .grav-youtube {
 	position: relative;
 	width: 100%;
+	max-width: min(90vw, 1400px);
 	height: 0;
-	padding-bottom: 56.25%; /* 16:9 aspect ratio */
+	padding-bottom: min(50.625vh, 56.25%); /* 16:9 aspect ratio, capped at viewport height */
 	overflow: hidden;
 }
 
@@ -217,6 +223,19 @@ body.modal-open {
 	width: 100%;
 	height: 100%;
 	border: none;
+}
+
+/* Better video sizing for mobile landscape */
+@media (max-width: 880px) and (orientation: landscape) {
+	.project-video {
+		padding: 0.5rem;
+		height: 100%;
+	}
+	
+	.project-video .grav-youtube {
+		max-width: 100%;
+		padding-bottom: min(calc(100vh - 8rem), 56.25%);
+	}
 }
 
 .project-gallery-empty {
@@ -455,15 +474,58 @@ body.modal-open {
 	align-items: stretch;
 }
 
-.project-details {
-	display: block;
-	overflow-y: auto;
+/* Text slide styles */
+.project-gallery-item.project-details {
+	width: auto;
+	min-width: min(45%, 600px);
+	max-width: min(45%, 700px);
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	background: rgba(17, 19, 29, 0.6);
+	overflow-y: auto;
 }
 
 .project-details-content {
-	padding: 1.5rem;
-	overflow-y: auto;
+	padding: clamp(1.5rem, 3vw, 3rem);
+	width: 100%;
+	max-width: 65ch;
+	margin: 0 auto;
+}
+
+.project-details-content .project-body {
+	text-align: left;
+}
+
+.project-details-content .project-body p {
+	margin: 0 0 1em;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	hyphens: auto;
+}
+
+.project-details-content .project-body p:last-child {
+	margin-bottom: 0;
+}
+
+.project-details-content .project-body h1,
+.project-details-content .project-body h2,
+.project-details-content .project-body h3,
+.project-details-content .project-body h4,
+.project-details-content .project-body h5,
+.project-details-content .project-body h6 {
+	margin: 1.5em 0 0.5em;
+	line-height: 1.3;
+}
+
+.project-details-content .project-body h1:first-child,
+.project-details-content .project-body h2:first-child,
+.project-details-content .project-body h3:first-child,
+.project-details-content .project-body h4:first-child,
+.project-details-content .project-body h5:first-child,
+.project-details-content .project-body h6:first-child {
+	margin-top: 0;
 }
 
 
@@ -515,17 +577,27 @@ body.modal-open {
 
 	.project-gallery-item {
 		flex: 0 0 auto;
+		width: 100%;
 		max-width: 100%;
 		margin-inline: 0 auto;
+	}
+	
+	/* Text slides on mobile - better sizing for landscape */
+	.project-gallery-item.project-details {
+		min-width: 100%;
+		max-width: 100%;
+		width: 100%;
+		justify-content: center;
+	}
+	
+	.project-details-content {
+		padding: clamp(1.5rem, 4vw, 2.5rem);
+		max-width: min(90%, 800px);
 	}
 
 	.carousel-button {
 		height: clamp(7rem, 32vh, 12rem);
 		width: clamp(2.5rem, 8vw, 3.5rem);
-	}
-
-	.project-details {
-		padding: 1.5rem;
 	}
 	
 	@media (orientation: portrait) {
@@ -550,14 +622,9 @@ body.modal-open {
 			width: 100%;
 			scroll-snap-align: start;
 		}
-
-		.project-details {
-			flex: 0 0 auto;
-			height: auto;
-			max-height: 80vh;
-		}
 		
-		.project-details-content {
+		.project-gallery-item.project-details {
+			min-height: auto;
 			height: auto;
 		}
 
@@ -632,6 +699,31 @@ body.modal-open {
 	.modal-header {
 		padding: 0.6rem 0.8rem;
 	}
+	
+	.project-video {
+		padding: 0.5rem;
+	}
+	
+	.project-details-content {
+		padding: 1rem 1.5rem;
+	}
+	
+	/* Better text presentation on mobile landscape */
+	@media (orientation: landscape) {
+		.project-details-content {
+			padding: clamp(1rem, 3vh, 2rem) clamp(1.5rem, 4vw, 3rem);
+		}
+		
+		.project-details-content .project-body {
+			font-size: clamp(0.9rem, 2.5vh, 1.1rem);
+			line-height: 1.6;
+		}
+		
+		.project-gallery-item.project-details {
+			align-items: center;
+			justify-content: center;
+		}
+	}
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
@@ -695,18 +787,24 @@ body.modal-open {
 		max-height: 100%;
 		height: 100%;
 	}
-
-	.project-details {
-		max-width: 40%;
-		flex: 0 0 40%;
-		overflow-y: auto;
-		display: flex;
-		flex-direction: column;
-		
-		.project-details-content {
-			height: auto;
-			flex: 1 1 auto;
-		}
+	
+	.project-gallery-item.project-details {
+		min-width: 100%;
+		max-width: 100%;
+		width: 100%;
 	}
 	
+	.project-video {
+		padding: 0.25rem;
+		height: 100%;
+	}
+	
+	.project-video .grav-youtube {
+		max-width: 100%;
+		padding-bottom: min(calc(100vh - 6rem), 56.25%);
+	}
+	
+	.project-details-content {
+		padding: 0.75rem 1rem;
+	}
 }
