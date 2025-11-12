@@ -208,7 +208,6 @@ body.modal-open {
 
 .project-gallery-item {
 	flex: 0 0 auto;
-	width: 100%;
 	height: 100%;
 	max-height: calc(100dvh - 16rem);
 	position: relative;
@@ -225,7 +224,7 @@ body.modal-open {
 	height: 100%;
 	display: block;
 	object-fit: contain;
-}
+} 
 
 /* Video embed styles */
 .project-video {
@@ -610,13 +609,12 @@ body.modal-open {
 		width: 100%;
 		max-width: 100%;
 		margin-inline: 0 auto;
+		height: 100%;
+		max-height: calc(100dvh - 12rem);
 	}
 	
 	/* Text slides on mobile - better sizing for landscape */
 	.project-gallery-item.project-details {
-		min-width: 100%;
-		max-width: 100%;
-		width: 100%;
 		justify-content: center;
 	}
 	
@@ -644,23 +642,41 @@ body.modal-open {
 			height: auto;
 			max-height: none;
 			width: 100%;
+			padding: 0;
 		}
 
 		.project-gallery-item {
 			height: auto;
-			min-height: 300px;
+			max-height: none;
+			min-height: auto;
 			width: 100%;
 			scroll-snap-align: start;
+		}
+		
+		.project-gallery-item img {
+			width: 100%;
+			height: auto;
 		}
 		
 		.project-gallery-item.project-details {
 			min-height: auto;
 			height: auto;
+			min-width: 100%;
+			max-width: 100%;
+			width: 100%;
 		}
 
 		.project-gallery::-webkit-scrollbar {
 			width: 8px;
 			height: auto;
+		}
+		
+		.project {
+			padding: 0;
+		}
+		
+		.project-layout {
+			gap: 0;
 		}
 		
 		/* Hide carousel buttons in vertical scrolling view */
@@ -741,7 +757,7 @@ body.modal-open {
 	/* Better text presentation on mobile landscape */
 	@media (orientation: landscape) {
 		.project-details-content {
-			padding: clamp(1rem, 3vh, 2rem) clamp(1.5rem, 4vw, 3rem);
+			padding: clamp(1rem, 3vh, 2rem) clamp(4rem, 12vw, 5rem);
 		}
 		
 		.project-details-content .project-body {
@@ -750,6 +766,9 @@ body.modal-open {
 		}
 		
 		.project-gallery-item.project-details {
+			min-width: auto;
+			max-width: min(60%, 700px);
+			width: auto;
 			align-items: center;
 			justify-content: center;
 		}
@@ -811,6 +830,7 @@ body.modal-open {
 	.project-gallery {
 		flex: 1 1 60%;
 		overflow-y: auto;
+		background: #0f1018;
 	}
 	
 	.project-gallery-track {
@@ -818,10 +838,15 @@ body.modal-open {
 		height: 100%;
 	}
 	
+	.project-gallery-item {
+		height: 100%;
+		max-height: none;
+	}
+	
 	.project-gallery-item.project-details {
-		min-width: 100%;
-		max-width: 100%;
-		width: 100%;
+		min-width: min(40%, 600px);
+		max-width: min(40%, 700px);
+		width: auto;
 	}
 	
 	.project-video {
@@ -835,6 +860,6 @@ body.modal-open {
 	}
 	
 	.project-details-content {
-		padding: 0.75rem 1rem;
+		padding: 0.75rem clamp(4rem, 12vw, 5rem);
 	}
 }
