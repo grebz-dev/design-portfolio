@@ -27,8 +27,26 @@
 						{% elseif slide.element_selector == 'image' and slide.image.image %}
 							{% set image_file = page.media[slide.image.image|first.name] %}
 							{% if image_file %}
+								{# Create responsive image variants #}
+								{% set image_small = image_file.resize(640, 480).quality(80) %}
+								{% set image_medium = image_file.resize(1024, 768).quality(82) %}
+								{% set image_large = image_file.resize(1920, 1440).quality(82) %}
+								{% set image_xlarge = image_file.resize(2560, 1920).quality(85) %}
+								
 								<figure class="project-gallery-item">
-									<img src="{{ image_file.url }}" alt="{{ image_file.meta.alt ?: page.header.title ?: page.title }} image {{ loop.index }}">
+									<img 
+										src="{{ image_medium.url }}" 
+										srcset="{{ image_small.url }} 640w,
+												{{ image_medium.url }} 1024w,
+												{{ image_large.url }} 1920w,
+												{{ image_xlarge.url }} 2560w"
+										sizes="(max-width: 640px) 100vw, 
+											   (max-width: 1024px) 90vw,
+											   (max-width: 1920px) 85vw,
+											   2560px"
+										alt="{{ image_file.meta.alt ?: page.header.title ?: page.title }} image {{ loop.index }}"
+										loading="lazy"
+										decoding="async">
 								</figure>
 							{% endif %}
 						{% elseif slide.element_selector == 'video' and slide.video.video_url %}
