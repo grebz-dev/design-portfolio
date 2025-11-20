@@ -286,12 +286,17 @@ body.modal-open {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	display: flex;
+	display: none;
 	justify-content: space-between;
 	align-items: center;
 	pointer-events: none;
 	z-index: 10;
 	padding: 0 0.5rem;
+}
+
+/* Only show controls when modal is open */
+.modal-toggle:checked ~ .modal-container .carousel-controls {
+	display: flex;
 }
 
 .carousel-button {
@@ -497,7 +502,6 @@ body.modal-open {
 }
 
 .project-layout {
-	position: relative;
 	display: flex;
 	gap: 1rem;
 	flex-wrap: nowrap;
