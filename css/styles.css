@@ -497,6 +497,7 @@ body.modal-open {
 }
 
 .project-layout {
+	position: relative;
 	display: flex;
 	gap: 1rem;
 	flex-wrap: nowrap;
